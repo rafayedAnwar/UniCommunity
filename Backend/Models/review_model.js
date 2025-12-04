@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const reviewSchema = new Schema({
     courseId: {type: String, required: true},
-    userId: {type: String, required: true},
+    studentId: {type: String, required: true},
     theory_mem_rating: {type: Number, min: 1, max: 5, required: true},
     lab_difficulty_rating: {type: Number, min: 1, max: 5, required: true},
     assignment_rating: {type: Number, min: 1, max: 5, required: true},
