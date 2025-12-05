@@ -32,11 +32,13 @@ const eventRoutes = require("./Routes/event_routes");
 const cgpaRoutes = require("./Routes/cgpa_routes");
 const reviewRoutes = require("./Routes/review_routes");
 const authRoutes = require("./Routes/auth_routes");
+const userRoutes = require("./Routes/user_routes");
 
 app.use("/api/events", eventRoutes);
 app.use("/api/cgpa", cgpaRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // Logger
 app.use((req, res, next) => {
