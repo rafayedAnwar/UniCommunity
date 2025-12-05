@@ -1,56 +1,58 @@
-require('dotenv').config()
-const express = require('express')
-const mongoose = require('mongoose')
-const session = require('express-session')
-const passport = require('passport')
-const cors = require('cors')
-const app = express()
-app.use(cors({
-    origin: 'http://localhost:3000', //frontend origin
-    credentials: true //allow cookies to be sent
-}))
-require('./Config/passport_config') 
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const passport = require("passport");
+const cors = require("cors");
+require("./Config/passport_config");
 
-app.use(express.json())
+const app = express();
 
-//session middleware
-app.use(session({
-    secret: process.env.SESSION_SECRET,
+const PORT = process.env.PORT || 1760;
+const MONGO_URI =
+  process.env.SERVER_URI || "mongodb://localhost:27017/unicommunity";
+
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(express.json());
+
+// --- SESSION & PASSPORT---
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "assignment_secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } //1 day
-}))
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
-//initialize passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
+// --- ROUTES ---
+const eventRoutes = require("./Routes/event_routes");
+const cgpaRoutes = require("./Routes/cgpa_routes");
+const reviewRoutes = require("./Routes/review_routes");
+const authRoutes = require("./Routes/auth_routes");
 
-//require routes
-const reviewRoutes = require('./Routes/review_routes')
-const authRoutes = require('./Routes/auth_routes')
+app.use("/api/events", eventRoutes);
+app.use("/api/cgpa", cgpaRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/auth", authRoutes);
 
-//middlewares
-app.use('/api/reviews', reviewRoutes)
-app.use('/api/auth', authRoutes)
- 
-
-//middleware to track requests in the console
+// Logger
 app.use((req, res, next) => {
-    console.log(req.path, req.method)
-    next()
-}) 
+  console.log(req.path, req.method);
+  next();
+});
 
-//connect to db
-mongoose.connect(process.env.SERVER_URI)
-    .then(() => {
-        console.log('Connected to DB')
-        app.listen(process.env.PORT, () => 
-            {
-                console.log('Server is running on port ' + process.env.PORT)
-            })
-    })
-    .catch((error) => {
-        console.log('Error connecting to DB:\n\n', error)
-    })
-
-
+// --- DB CONNECTION & START ---
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("Connected to DB");
+    app.listen(PORT, () => {
+      console.log("Server is running on port " + PORT);
+    });
+  })
+  .catch((error) => {
+    console.log("Error connecting to DB:\n\n", error);
+  });
