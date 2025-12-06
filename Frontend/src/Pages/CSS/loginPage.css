@@ -49,8 +49,8 @@
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 540;
   color: #333;
   cursor: pointer;
   display: flex;
@@ -79,26 +79,6 @@
   color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   position: relative;
-}
-
-.divider::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 10%;
-  width: 45%;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.divider::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 10%;
-  width: 45%;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Right Side - Branding */

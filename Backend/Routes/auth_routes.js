@@ -13,7 +13,7 @@ router.get('/google',
 // 2. Google Callback Route
 router.get('/google/callback',
   passport.authenticate('google', {
-    failureRedirect: 'http://localhost:3000/login'
+    failureRedirect: 'http://localhost:3000/failed'
   }),
   (req, res) => {
     // req.user always exists here because passport creates user if not found

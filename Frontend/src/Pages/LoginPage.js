@@ -7,11 +7,12 @@ const LoginPage = () => {
   return (
     //whole page container
     <div className="login-container">
+      {/*left section container*/}
       <div className="login-left">
           <div className="login-form">
             <img src={Icon} alt="Icon" className="login-icon" />
             <h2>Login with G-Suite</h2>
-            <p>If you don't have an account we will add one for you</p>
+            <p>If you don't have an account we'll add one for you</p>
             {/* Google Login Button */}
             <button 
                 className="google-login-btn"
