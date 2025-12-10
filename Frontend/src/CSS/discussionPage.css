@@ -1,0 +1,130 @@
+.header-block {
+    height: 120px;
+    width: 100%;
+    background: linear-gradient(135deg, #2776ea 0%, #2f4cc4 100%);
+    display: flex;
+    align-items: center;
+    position: relative; /* needed for absolute centering */
+}
+
+.header-block a {
+    position: absolute;
+    display: flex;   /* keeps icon centered inside the clickable area */
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-link {
+    right: 30px;
+}
+
+.logout-link {
+    right: 20px;
+}
+
+.profile-icon {
+    color: white;
+    width: 40px;
+    height: 40px;
+}
+
+.logout-icon {
+    color: white;
+    width: 50px;
+    height: 50px;
+}
+
+
+.icon-container {
+   position: relative;
+   z-index: 5;
+}
+
+body {
+    background-color: #e8f4f8;  
+}
+
+.icon {
+    height: 110px;
+    width: 110px;
+    margin-left: 20px;
+    margin-top: -55px;
+}
+
+.header-text {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, +20%);
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.profile-icon {
+    position: absolute;
+    right: 90px;
+    color: white;
+    width: 40px;
+    height: 40px;
+}
+
+.logout-icon {
+    position: absolute;
+    right: 20px;
+    color: white;
+    width: 50px;
+    height: 50px;
+}
+
+.search-results {
+    width: 100%;
+    background-color: white;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px #2776ea;
+    margin-top: .5rem;
+    font-size: 1.5rem;
+    text-indent: 15%;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.search-results::-webkit-scrollbar {
+    width: 30px; /* width of the scrollbar */
+}
+
+.search-results::-webkit-scrollbar-thumb {
+    background-color: #2776ea; /* your blue color */
+    border-radius: 5px;
+}
+
+.search-results-items {
+    padding: 10px 20px;
+}
+
+.search-results-items:hover {
+    background-color: #d6e4ff;
+    cursor: pointer;
+}
+
+.profile-icon,
+.logout-icon {
+    transition: 0.2s ease;  /* smooth animation */
+}
+
+/* On hover */
+.profile-link:hover .profile-icon{
+    transform: scale(1.15); /* slightly larger */
+    opacity: 0.8;           /* optional */
+    cursor: pointer;
+}
+.logout-link:hover .logout-icon {
+    transform: scale(1.15); /* slightly larger */
+    opacity: 0.8;           /* optional */
+    cursor: pointer;
+}

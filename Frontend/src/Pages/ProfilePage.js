@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./CSS/profilePage.css";
+import "../CSS/profilePage.css";
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -31,7 +31,7 @@ const ProfilePage = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`http://localhost:1760/api/users/${userId}`);
+      const response = await fetch(`http://localhost:1688/api/users/${userId}`);
       const data = await response.json();
       setProfile({
         firstName: data.firstName || "",
@@ -60,7 +60,7 @@ const ProfilePage = () => {
   const handleSaveProfile = async () => {
     try {
       const response = await fetch(
-        `http://localhost:1760/api/users/${userId}`,
+        `http://localhost:1688/api/users/${userId}`,
         {
           method: "PUT",
           headers: {

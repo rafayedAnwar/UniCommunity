@@ -1,6 +1,6 @@
 import React from "react";
-import "./CSS/loginPage.css";
-import Icon from "./Assets/icon.png";
+import "../CSS/loginPage.css";
+import Icon from "../Assets/icon.png";
 
 const LoginPage = () => {
   return (
@@ -39,5 +39,4 @@ const LoginPage = () => {
   );
 };
 
-//this line is missing - export name should match component name (LoginPage)
 export default LoginPage;

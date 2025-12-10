@@ -1,0 +1,41 @@
+/* Default — form stays left-side */
+.discussion-form {
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 400px;           /* keep consistent width */
+    transition: all 5s ease;
+}
+
+/* This class gets added when writing === true */
+.discussion-form.centered {
+    margin-left: auto;
+    margin-right: auto;     /* pushes form to the center */
+}
+
+/* Optional: smooth animation */
+.discussion-container {
+    width: 100%;
+    transition: all 5s ease;
+}
+
+/* Buttons / Inputs styling (optional placeholders) */
+.header-input,
+.main-input {
+    width: 100%;
+}
+
+.expand-button {
+    cursor: pointer;
+    height: 44px;
+    width: 44px;
+    margin-left: 80%;
+}
+
+.submit-button {
+    width: 100%;
+    cursor: pointer;
+}

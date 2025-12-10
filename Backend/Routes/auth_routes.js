@@ -17,7 +17,7 @@ router.get('/google/callback',
   }),
   (req, res) => {
     // req.user always exists here because passport creates user if not found
-    res.redirect('http://localhost:3000/dashboard')
+    res.redirect('http://localhost:3000/discussion'); // Redirect to profile page on successful login
   }
 );
 
