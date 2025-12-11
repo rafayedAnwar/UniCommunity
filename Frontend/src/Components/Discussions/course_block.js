@@ -11,7 +11,7 @@ const CourseBlock = ({courseSelected}) => {
     useEffect(() => {
         if (!courseSelected) return
 
-        fetch(`/api/courses/${courseSelected}`).then((response) => response.json()).then((json) => {
+        fetch(`http://localhost:1688/api/courses/${courseSelected}`).then((response) => response.json()).then((json) => {
             setCurrentCourseData(json);
         })
     }, [courseSelected]);

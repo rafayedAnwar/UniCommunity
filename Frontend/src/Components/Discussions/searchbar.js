@@ -7,7 +7,7 @@ const SearchBar = ({setResults, input, setInput}) => {
 //const [input, setInput] = useState("");
 
 const fetchData = (value) => {
-    fetch(`/api/courses/getall`).then((response) => response.json()).then((json) => {
+    fetch(`http://localhost:1688/api/courses/getall`).then((response) => response.json()).then((json) => {
         const results = json.filter((course) => { return value && course.course_code.toLowerCase().includes(value.toLowerCase())
     })
     setResults(results)

@@ -1,5 +1,14 @@
 const User = require("../Models/user_model");
 
+// Get current logged-in user
+const getCurrentUser = (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({ user: req.user }); // Passport sets req.user
+    } else {
+        res.status(401).json({ error: "Not authenticated" });
+    }
+};
+
 // GET Request to get user profile by ID
 const getUserProfile = async (req, res) => {
   try {
@@ -56,6 +65,7 @@ const getAllUsers = async (req, res) => {
 };
 
 module.exports = {
+  getCurrentUser,
   getUserProfile,
   updateUserProfile,
   getAllUsers,

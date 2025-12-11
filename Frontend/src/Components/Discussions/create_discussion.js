@@ -1,51 +1,91 @@
 import { useState } from "react";   
-import "./creatediscussion.css"
 
 //import icons:
 import { BsFillArrowRightSquareFill } from "react-icons/bs"
-import { RxCross2 } from "react-icons/rx"
+import { RiArrowLeftDoubleFill } from "react-icons/ri";
 
-const CreateDiscussion = ({courseSelected}) => {
+//notify using toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-    const [posted_by, setPostedby] = useState("6576859403a2b1c0d9e8f7a6") //to store who posted the discussion, the current value is demo for testing
+//css imported to overrite toastify css
+import "./creatediscussion.css"
+
+const CreateDiscussion = ({courseSelected, currentUser}) => {
     const [header_text, setHeaderText] = useState("") //to store the header text
     const [main_text, setMainText] = useState("") //to store the main text
     const [writing, setWriting] = useState(false); //to toggle the input box
     
+    //to make dynamic text areas
+    const handleTextareaInput = (e) => {
+        e.target.style.height = "auto";
+        e.target.style.height = e.target.scrollHeight + "px";
+    };
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const Discussion = { courseSelected, posted_by, header_text, main_text}
-        const postResponse = await fetch('/api/discussions/create', {
+        if (!header_text || !main_text) {
+            toast.error("Please fill in all fields");
+            return;}
+
+        const Discussion = { course_code: courseSelected, posted_by: currentUser._id, header_text, main_text}
+        const postResponse = await fetch('http://localhost:1688/api/discussions/create', {
             method: 'POST',
             body: JSON.stringify(Discussion),
             headers: {'Content-Type': 'application/json'}
             })
         if (postResponse.ok) {
-            console.log("Discussion Posted Successfully");
-            setPostedby("");
+            toast.success("Discussion Posted!!")
             setHeaderText("");
             setMainText("");
-        } else {console.log("Failed to post discussion");}    
+            setWriting(false);
+        } else {
+            toast.error("Failed to post discussion");
+            const errorData = await postResponse.json();
+            console.log("Error details:", errorData);
+            setWriting(false);
+        }    
         }
 
 
     return (
         <div className="discussion-container">
-            <form className={`discussion-form ${writing ? "centered" : ""}`} onSubmit={handleSubmit}>
-                <input placeholder="Create a new Discussion"
-                       className="header-input"
-                       onChange={(e)=>{setHeaderText(e.target.value)}}
-                       value={header_text}/>
-                {!writing && <BsFillArrowRightSquareFill title="Expand" className="expand-button" onClick={() => setWriting(true)}/>}
-                {writing && <RxCross2 className="expand-button" title="Cancel" onClick={() => setWriting(false)}/>}
-                {writing && <input type="text" 
-                             placeholder="Create a new Discussion" 
+                {!writing && 
+                    <div className="expand-text-container" onClick={() => setWriting(true)}>
+                        <div className="expand-text">Create a New Discussion</div>
+                            <BsFillArrowRightSquareFill title="Expand" className="expand-button" />
+                        </div>
+                }
+                {writing && <RiArrowLeftDoubleFill className="close-button" title="Cancel" onClick={() => setWriting(false)}/>}
+            {writing && (
+            <form className="discussion-form" onSubmit={handleSubmit}>
+                <textarea type="text" placeholder="Title: " 
+                             className="header-input" 
+                             onChange={(e)=>{setHeaderText(e.target.value)}}
+                             onInput={handleTextareaInput} 
+                             value={header_text}
+                             rows={1}/>
+                <textarea type="text" placeholder="Discussion body: " 
                              className="main-input"
                              onChange={(e)=>{setMainText(e.target.value)}}
-                             value={main_text}></input>}
-                {writing && <button type="submit" placeholder="Create a new Discussion" className="submit-button">Post Discussion</button>}
+                             onInput={handleTextareaInput}
+                             value={main_text}
+                             rows={3}/>
+                <button type="submit" 
+                             className="submit-button">Post Discussion
+                            </button>
+            </form>)}
 
-            </form>
+            <ToastContainer
+            position="top-right"
+            autoClose={3000} // closes after 3 seconds
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            />
                
         </div>
             )

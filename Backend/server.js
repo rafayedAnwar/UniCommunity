@@ -10,7 +10,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 const MONGO_URI =
-  process.env.SERVER_URI || "mongodb://localhost:27017/unicommunity";
+  process.env.SERVER_URI;
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());

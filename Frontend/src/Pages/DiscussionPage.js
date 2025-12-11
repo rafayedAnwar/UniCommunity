@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../CSS/discussionPage.css";
 import Icon from "../Assets/icon.png";
+import { useState, useEffect } from "react";
 
 //importing components
 import SearchBar from "../Components/Discussions/searchbar.js"
@@ -15,11 +16,21 @@ import { FaUser } from "react-icons/fa";
 import { HiOutlineLogout } from "react-icons/hi"
 
 const DiscussionPage = () => {
-    {/*for dynamic search bar*/}
-    const [results, setResults] = React.useState([]);
-    {/*for suggestion click setup*/}
-    const [courseSelected, setCourseSelected] = React.useState(null)
-    const [searchInput, setSearchInput] = React.useState(""); {/*new*/} 
+    const [results, setResults] = useState([]);
+    const [courseSelected, setCourseSelected] = useState(null)
+    const [searchInput, setSearchInput] = useState("")
+    const [currentUser, setCurrentUser] = useState(null)
+
+    useEffect(() => {
+        fetch("http://localhost:1688/api/users/current", {
+            credentials: "include", // important for session-based auth
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.user) setCurrentUser(data.user);
+        })
+        .catch(err => console.error(err));
+    }, []);
 
     return (
         <div className="Main-Container">
@@ -48,7 +59,7 @@ const DiscussionPage = () => {
             {courseSelected &&(
                 <div>
                 <CourseBlock courseSelected={courseSelected}/>
-                <CreateDiscussion courseSelected={courseSelected}/>
+                <CreateDiscussion courseSelected={courseSelected} currentUser={currentUser} />
                 </div>
             )}            
              

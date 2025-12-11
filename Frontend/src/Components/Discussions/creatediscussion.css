@@ -1,41 +1,97 @@
-/* Default — form stays left-side */
-.discussion-form {
+.discussion-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    gap: 20px;                
+}
+
+.expand-text-container {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;    
+    gap: 5px;                
+}
+.expand-text {
+    font-size: 28px;
     display: flex;
     background-color: white;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;
+    height: 60px;
+    padding: 3px;
     justify-content: center;
-    gap: 10px;
-    width: 400px;           /* keep consistent width */
-    transition: all 5s ease;
-}
-
-/* This class gets added when writing === true */
-.discussion-form.centered {
-    margin-left: auto;
-    margin-right: auto;     /* pushes form to the center */
-}
-
-/* Optional: smooth animation */
-.discussion-container {
-    width: 100%;
-    transition: all 5s ease;
-}
-
-/* Buttons / Inputs styling (optional placeholders) */
-.header-input,
-.main-input {
-    width: 100%;
+    align-items: center;
+    border-radius: 10px;
+    margin-left: 10px;
 }
 
 .expand-button {
-    cursor: pointer;
-    height: 44px;
-    width: 44px;
-    margin-left: 80%;
+    color: #2776ea;
+    height: 80px;
+    width: 80px;
+}
+.close-button {
+    color: #2776ea;
+    height: 60px;
+    width: 60px;
+    align-self: flex-end;
+    margin-right: 26%;
+}
+
+.discussion-form {
+    max-width: 900px;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-input {
+    height: 30px;
+}
+.main-input {
+    margin-top: 10px;
+    height: 80px;
+}
+
+.header-input,
+.main-input {
+    width: 800px;
+    background-color: white;
+    box-shadow: 0 0px 4px #2776ea;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 24px;
+    font-family: Arial;
+    overflow: hidden;      /* hide scrollbars */
+    resize: none;          /* prevent manual resizing */
+    border: 1px solid transparent;
 }
 
 .submit-button {
-    width: 100%;
-    cursor: pointer;
+    border: none;
+    background-color: #2776ea;
+    border-radius: 30px;
+    height: 50px;
+    width: 200px;
+    margin-top: 5px;
+    font-size: 21px;
+    font-weight: bold;
+    color: white;
+}
+
+/* override Toastify styles */
+.Toastify__toast--success {
+    font-size: 24px;
+    padding: 16px 24px;
+}
+.Toastify__toast--error {
+    color: #2776ea;
+}
+
+:root {
+
+  --toastify-color-success: #2776ea;
+  --toastify-color-error: #2776ea;
+  --toastify-icon-color-success: var(--toastify-color-success);
+  --toastify-icon-color-error: var(--toastify-color-error);
 }
