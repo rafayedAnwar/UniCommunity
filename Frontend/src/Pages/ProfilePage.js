@@ -21,17 +21,54 @@ const ProfilePage = () => {
     type: "current",
   });
 
-  // TODO: Replace with actual user ID from authentication
-  const userId = "693bd29cddcf4501d3dcd73c"; // Test user ID
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch user profile data
-    fetchProfile();
+    // Fetch current authenticated user first
+    fetchCurrentUser();
   }, []);
 
-  const fetchProfile = async () => {
+  const fetchCurrentUser = async () => {
     try {
-      const response = await fetch(`http://localhost:1760/api/users/${userId}`);
+      const response = await fetch("http://localhost:1760/api/auth/current", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        setUserId(userData._id);
+        setProfile({
+          firstName: userData.firstName || "",
+          lastName: userData.lastName || "",
+          email: userData.email || "",
+          bio: userData.bio || "",
+          linkedIn: userData.socialLinks?.linkedIn || "",
+          github: userData.socialLinks?.github || "",
+          portfolio: userData.socialLinks?.portfolio || "",
+          currentCourses: userData.currentCourses || [],
+          completedCourses: userData.completedCourses || [],
+        });
+      } else {
+        // Not authenticated, redirect to login
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+      window.location.href = "/login";
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProfile = async () => {
+    if (!userId) return;
+    try {
+      const response = await fetch(
+        `http://localhost:1760/api/users/${userId}`,
+        {
+          credentials: "include",
+        }
+      );
       const data = await response.json();
       setProfile({
         firstName: data.firstName || "",
@@ -66,6 +103,7 @@ const ProfilePage = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             bio: profile.bio,
             socialLinks: {
@@ -143,6 +181,16 @@ const ProfilePage = () => {
       }));
     }
   };
+
+  if (loading) {
+    return (
+      <div className="profile-container">
+        <div style={{ textAlign: "center", padding: "3rem" }}>
+          <h2>Loading profile...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
@@ -274,7 +322,7 @@ const ProfilePage = () => {
             <div className="link-item">
               <label>
                 <img
-                  src="https://www.svgrepo.com/show/295128/globe.svg"
+                  src="https://www.svgrepo.com/show/509124/globe.svg"
                   alt="Portfolio"
                   className="link-icon"
                 />

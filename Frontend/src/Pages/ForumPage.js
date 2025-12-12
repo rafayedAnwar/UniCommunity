@@ -23,13 +23,35 @@ const ForumPage = () => {
     fileType: "",
   });
 
-  // TODO: Replace with actual user ID from authentication
-  const userId = "693bd29cddcf4501d3dcd73c"; // Test user ID
-  const userName = "Test User";
+  const [userId, setUserId] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchForums();
+    fetchCurrentUser();
   }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch("http://localhost:1760/api/auth/current", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        setUserId(userData._id);
+        setUserName(`${userData.firstName} ${userData.lastName}`);
+        fetchForums();
+      } else {
+        // Not authenticated, redirect to login
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+      window.location.href = "/login";
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchForums = async () => {
     try {
@@ -205,6 +227,16 @@ const ForumPage = () => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
+
+  if (loading) {
+    return (
+      <div className="forum-container">
+        <div style={{ textAlign: "center", padding: "3rem" }}>
+          <h2>Loading forums...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="forum-container">
