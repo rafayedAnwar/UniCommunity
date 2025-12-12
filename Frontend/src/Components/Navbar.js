@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
+import Icon from "../Assets/icon-gray.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -12,7 +13,16 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
+        <Link
+          to="/"
+          className="navbar-logo"
+          style={{ display: "flex", alignItems: "center", gap: "10px" }}
+        >
+          <img
+            src={Icon}
+            alt="Icon"
+            style={{ width: "32px", height: "32px", objectFit: "contain" }}
+          />
           UniCommunity
         </Link>
 
