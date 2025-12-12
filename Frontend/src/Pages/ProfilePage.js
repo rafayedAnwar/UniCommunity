@@ -97,7 +97,7 @@ const ProfilePage = () => {
   const handleSaveProfile = async () => {
     try {
       const response = await fetch(
-        `http://localhost:1688/api/users/${userId}`,
+        `http://localhost:1760/api/users/${userId}`,
         {
           method: "PUT",
           headers: {

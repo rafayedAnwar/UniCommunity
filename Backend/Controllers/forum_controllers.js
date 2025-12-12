@@ -41,7 +41,9 @@ const createForum = async (req, res) => {
     // Check if forum already exists
     const existingForum = await Forum.findOne({ courseCode });
     if (existingForum) {
-      return res.status(400).json({ error: "Forum already exists for this course" });
+      return res
+        .status(400)
+        .json({ error: "Forum already exists for this course" });
     }
 
     const forum = await Forum.create({
@@ -86,16 +88,8 @@ const joinForum = async (req, res) => {
 const uploadResource = async (req, res) => {
   try {
     const { courseCode } = req.params;
-    const {
-      title,
-      description,
-      fileUrl,
-      fileName,
-      fileSize,
-      fileType,
-      userId,
-      uploaderName,
-    } = req.body;
+    const { title, description, fileUrl, fileType, userId, uploaderName } =
+      req.body;
 
     const forum = await Forum.findOne({ courseCode });
     if (!forum) {
@@ -104,15 +98,15 @@ const uploadResource = async (req, res) => {
 
     // Check if user is a member
     if (!forum.members.includes(userId)) {
-      return res.status(403).json({ error: "Must be a forum member to upload resources" });
+      return res
+        .status(403)
+        .json({ error: "Must be a forum member to upload resources" });
     }
 
     const resource = {
       title,
       description,
       fileUrl,
-      fileName,
-      fileSize,
       fileType,
       uploadedBy: userId,
       uploaderName,
@@ -185,7 +179,9 @@ const deleteResource = async (req, res) => {
 
     // Check if user is the uploader
     if (resource.uploadedBy.toString() !== userId) {
-      return res.status(403).json({ error: "Not authorized to delete this resource" });
+      return res
+        .status(403)
+        .json({ error: "Not authorized to delete this resource" });
     }
 
     forum.resources.pull(resourceId);

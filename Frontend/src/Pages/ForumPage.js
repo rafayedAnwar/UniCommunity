@@ -18,8 +18,6 @@ const ForumPage = () => {
     title: "",
     description: "",
     fileUrl: "",
-    fileName: "",
-    fileSize: 0,
     fileType: "",
   });
 
@@ -124,6 +122,10 @@ const ForumPage = () => {
 
       if (response.ok) {
         alert("Joined forum successfully!");
+        // Update selectedForum members immediately for UI feedback
+        setSelectedForum((prev) =>
+          prev ? { ...prev, members: [...(prev.members || []), userId] } : prev
+        );
         fetchForums();
       } else {
         const error = await response.json();
@@ -160,8 +162,6 @@ const ForumPage = () => {
           title: "",
           description: "",
           fileUrl: "",
-          fileName: "",
-          fileSize: 0,
           fileType: "",
         });
         fetchForumResources(selectedForum.courseCode);
@@ -218,14 +218,6 @@ const ForumPage = () => {
       console.error("Error deleting resource:", error);
       alert("Failed to delete resource");
     }
-  };
-
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
   if (loading) {
@@ -290,12 +282,29 @@ const ForumPage = () => {
                     )}
                   </div>
                   <div className="forum-actions">
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => handleJoinForum(selectedForum.courseCode)}
-                    >
-                      Join Forum
-                    </button>
+                    {selectedForum.members &&
+                    selectedForum.members.includes(userId) ? (
+                      <button
+                        className="btn btn-secondary"
+                        disabled
+                        style={{
+                          backgroundColor: "#b5b5b5",
+                          cursor: "not-allowed",
+                        }}
+                      >
+                        Joined
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-success"
+                        style={{ backgroundColor: "#38a169", color: "white" }}
+                        onClick={() =>
+                          handleJoinForum(selectedForum.courseCode)
+                        }
+                      >
+                        Join Forum
+                      </button>
+                    )}
                     <button
                       className="btn btn-primary"
                       onClick={() => setShowUploadResource(true)}
@@ -333,12 +342,7 @@ const ForumPage = () => {
                         <p className="resource-description">
                           {resource.description}
                         </p>
-                        <div className="resource-meta">
-                          <span className="file-name">{resource.fileName}</span>
-                          <span className="file-size">
-                            {formatFileSize(resource.fileSize)}
-                          </span>
-                        </div>
+
                         <div className="resource-footer">
                           <div className="uploader-info">
                             <span>Uploaded by {resource.uploaderName}</span>
@@ -491,33 +495,7 @@ const ForumPage = () => {
                   placeholder="https://drive.google.com/..."
                 />
               </div>
-              <div className="form-group">
-                <label>File Name *</label>
-                <input
-                  type="text"
-                  value={newResource.fileName}
-                  onChange={(e) =>
-                    setNewResource({ ...newResource, fileName: e.target.value })
-                  }
-                  required
-                  placeholder="e.g., chapter5_notes.pdf"
-                />
-              </div>
-              <div className="form-group">
-                <label>File Size (bytes) *</label>
-                <input
-                  type="number"
-                  value={newResource.fileSize}
-                  onChange={(e) =>
-                    setNewResource({
-                      ...newResource,
-                      fileSize: parseInt(e.target.value),
-                    })
-                  }
-                  required
-                  placeholder="e.g., 2048576"
-                />
-              </div>
+
               <div className="form-group">
                 <label>File Type *</label>
                 <select

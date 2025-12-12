@@ -6,8 +6,6 @@ const resourceSchema = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     fileUrl: { type: String, required: true },
-    fileName: { type: String, required: true },
-    fileSize: { type: Number, required: true },
     fileType: { type: String, required: true },
     uploadedBy: {
       type: Schema.Types.ObjectId,
