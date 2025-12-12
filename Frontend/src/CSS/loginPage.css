@@ -25,7 +25,9 @@
 .login-icon {
   width: 200px;
   height: 200px;
-  padding-left: 90px;
+  display: block;
+  margin: 0 auto 24px auto;
+  padding: 0;
 }
 
 .login-form h2 {
@@ -49,8 +51,8 @@
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 540;
   color: #333;
   cursor: pointer;
   display: flex;
@@ -59,6 +61,7 @@
   gap: 10px;
   transition: all 0.3s ease;
   margin-bottom: 20px;
+  font-family: poppins, sans-serif;
 }
 
 .google-login-btn:hover {
@@ -81,33 +84,13 @@
   position: relative;
 }
 
-.divider::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 10%;
-  width: 45%;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.divider::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 10%;
-  width: 45%;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
 /* Right Side - Branding */
 .login-right {
   flex: 3.35;
   display: flex;
   align-items: flex-start;
   justify-content: left;
-  background-image: url('../Assets/login page illustration.png');
+  background-image: url("../Assets/login page illustration.png");
   background-size: cover;
   padding: 40px;
 }

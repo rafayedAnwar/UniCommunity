@@ -1,11 +1,12 @@
 import React from "react";
-import "./CSS/loginPage.css";
-import Icon from "./Assets/icon.png";
+import "../CSS/loginPage.css";
+import Icon from "../Assets/icon.png";
 
 const LoginPage = () => {
   return (
     //whole page container
     <div className="login-container">
+      {/*left section container*/}
       <div className="login-left">
         <div className="login-form">
           <img src={Icon} alt="Icon" className="login-icon" />
@@ -44,5 +45,4 @@ const LoginPage = () => {
   );
 };
 
-//this line is missing - export name should match component name (LoginPage)
 export default LoginPage;

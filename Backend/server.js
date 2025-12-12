@@ -8,9 +8,8 @@ require("./Config/passport_config");
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI =
-  process.env.SERVER_URI || "mongodb://localhost:27017/unicommunity";
+const PORT = process.env.PORT;
+const MONGO_URI = process.env.SERVER_URI;
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
@@ -34,6 +33,8 @@ const reviewRoutes = require("./Routes/review_routes");
 const authRoutes = require("./Routes/auth_routes");
 const userRoutes = require("./Routes/user_routes");
 const forumRoutes = require("./Routes/forum_routes");
+const discussionRoutes = require("./Routes/discussion_routes");
+const courseRoutes = require("./Routes/course_routes");
 
 app.use("/api/events", eventRoutes);
 app.use("/api/cgpa", cgpaRoutes);
@@ -41,6 +42,8 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/forums", forumRoutes);
+app.use("/api/discussions", discussionRoutes);
+app.use("/api/courses", courseRoutes);
 
 // Logger
 app.use((req, res, next) => {

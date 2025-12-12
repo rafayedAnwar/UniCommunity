@@ -9,6 +9,7 @@ import Navbar from "./Components/Navbar";
 import LoginPage from "./Pages/LoginPage";
 import ProfilePage from "./Pages/ProfilePage";
 import ForumPage from "./Pages/ForumPage";
+import DiscussionPage from "./Pages/DiscussionPage";
 
 function AppContent() {
   const location = useLocation();
@@ -23,6 +24,7 @@ function AppContent() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/forums" element={<ForumPage />} />
+        <Route path="/discussion" element={<DiscussionPage />} />
       </Routes>
     </div>
   );
