@@ -33,12 +33,14 @@ const cgpaRoutes = require("./Routes/cgpa_routes");
 const reviewRoutes = require("./Routes/review_routes");
 const authRoutes = require("./Routes/auth_routes");
 const userRoutes = require("./Routes/user_routes");
+const forumRoutes = require("./Routes/forum_routes");
 
 app.use("/api/events", eventRoutes);
 app.use("/api/cgpa", cgpaRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/forums", forumRoutes);
 
 // Logger
 app.use((req, res, next) => {
