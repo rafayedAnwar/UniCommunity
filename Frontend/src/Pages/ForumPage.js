@@ -24,8 +24,8 @@ const ForumPage = () => {
   });
 
   // TODO: Replace with actual user ID from authentication
-  const userId = "user123";
-  const userName = "John Doe";
+  const userId = "693bd29cddcf4501d3dcd73c"; // Test user ID
+  const userName = "Test User";
 
   useEffect(() => {
     fetchForums();

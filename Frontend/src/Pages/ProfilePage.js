@@ -22,7 +22,7 @@ const ProfilePage = () => {
   });
 
   // TODO: Replace with actual user ID from authentication
-  const userId = "user123";
+  const userId = "693bd29cddcf4501d3dcd73c"; // Test user ID
 
   useEffect(() => {
     // Fetch user profile data
