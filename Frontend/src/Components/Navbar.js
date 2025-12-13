@@ -14,7 +14,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link
-          to="/"
+          to="/profile"
           className="navbar-logo"
           style={{ display: "flex", alignItems: "center", gap: "10px" }}
         >
