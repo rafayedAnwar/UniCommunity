@@ -81,10 +81,35 @@ const getUserBadges = async (req, res) => {
   }
 };
 
+
+// GET Request to search users by name
+const searchUsersByName = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.trim().length === 0) {
+      return res.status(400).json({ error: "Query required" });
+    }
+    // Search by first, last, full name, or email (case-insensitive, partial)
+    const regex = new RegExp(q, "i");
+    const users = await User.find({
+      $or: [
+        { firstName: regex },
+        { lastName: regex },
+        { email: regex },
+        { $expr: { $regexMatch: { input: { $concat: ["$firstName", " ", "$lastName"] }, regex: q, options: "i" } } }
+      ]
+    }).select("firstName lastName email photo bio");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getCurrentUser,
   getUserProfile,
   updateUserProfile,
   getAllUsers,
   getUserBadges,
+  searchUsersByName,
 };

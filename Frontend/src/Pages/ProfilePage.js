@@ -239,26 +239,21 @@ const ProfilePage = () => {
       </div>
 
       <div className="profile-content">
+        {/* Profile Photo */}
+        <div style={{ display: "flex", alignItems: "center", marginBottom: 24 }}>
+          <img
+            src={profile.photo || `https://ui-avatars.com/api/?name=${profile.firstName}`}
+            alt={profile.firstName}
+            style={{ width: 100, height: 100, borderRadius: "50%", marginRight: 24, objectFit: "cover" }}
+          />
+          <div>
+            <h2 style={{ margin: 0 }}>{profile.firstName} {profile.lastName}</h2>
+            <div style={{ color: '#888', fontSize: 16 }}>{profile.email}</div>
+          </div>
+        </div>
         {/* Badges Section */}
         <BadgeDisplay badges={badges} />
-        {/* Basic Info Section */}
-        <section className="profile-section">
-          <h2>Basic Information</h2>
-          <div className="info-grid">
-            <div className="info-item">
-              <label>First Name</label>
-              <p>{profile.firstName}</p>
-            </div>
-            <div className="info-item">
-              <label>Last Name</label>
-              <p>{profile.lastName}</p>
-            </div>
-            <div className="info-item full-width">
-              <label>Email</label>
-              <p>{profile.email}</p>
-            </div>
-          </div>
-        </section>
+        {/* Basic Info Section removed as per new requirements */}
 
         {/* Bio Section */}
         <section className="profile-section">

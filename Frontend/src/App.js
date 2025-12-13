@@ -10,6 +10,10 @@ import LoginPage from "./Pages/LoginPage";
 import ProfilePage from "./Pages/ProfilePage";
 import ForumPage from "./Pages/ForumPage";
 import DiscussionPage from "./Pages/DiscussionPage";
+import UserSearchPage from "./Pages/UserSearchPage";
+import PublicProfilePage from "./Pages/PublicProfilePage";
+import MessagePage from "./Pages/MessagePage";
+import MessagesOverviewPage from "./Pages/MessagesOverviewPage";
 
 function AppContent() {
   const location = useLocation();
@@ -25,6 +29,10 @@ function AppContent() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/forums" element={<ForumPage />} />
         <Route path="/discussion" element={<DiscussionPage />} />
+        <Route path="/search" element={<UserSearchPage />} />
+        <Route path="/profile/:userId" element={<PublicProfilePage />} />
+        <Route path="/messages" element={<MessagesOverviewPage />} />
+        <Route path="/messages/:userId" element={<MessagePage />} />
       </Routes>
     </div>
   );

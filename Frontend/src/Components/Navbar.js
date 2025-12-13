@@ -28,43 +28,28 @@ const Navbar = () => {
 
         <ul className="navbar-menu">
           <li className="navbar-item">
-            <Link
-              to="/profile"
-              className={`navbar-link ${isActive("/profile")}`}
-            >
-              Profile
-            </Link>
+            <Link to="/profile" className={`navbar-link ${isActive("/profile")}`}>Profile</Link>
           </li>
           <li className="navbar-item">
-            <Link to="/forums" className={`navbar-link ${isActive("/forums")}`}>
-              Forums
-            </Link>
+            <Link to="/search" className={`navbar-link ${isActive("/search")}`}>Find Students</Link>
           </li>
           <li className="navbar-item">
-            <Link
-              to="/discussion"
-              className={`navbar-link ${isActive("/discussion")}`}
-            >
-              Discussion
-            </Link>
+            <Link to="/forums" className={`navbar-link ${isActive("/forums")}`}>Forums</Link>
           </li>
           <li className="navbar-item">
-            <Link
-              to="/reviews"
-              className={`navbar-link ${isActive("/reviews")}`}
-            >
-              Reviews
-            </Link>
+            <Link to="/discussion" className={`navbar-link ${isActive("/discussion")}`}>Discussion</Link>
           </li>
           <li className="navbar-item">
-            <Link to="/events" className={`navbar-link ${isActive("/events")}`}>
-              Events
-            </Link>
+            <Link to="/reviews" className={`navbar-link ${isActive("/reviews")}`}>Reviews</Link>
           </li>
           <li className="navbar-item">
-            <Link to="/cgpa" className={`navbar-link ${isActive("/cgpa")}`}>
-              CGPA
-            </Link>
+            <Link to="/events" className={`navbar-link ${isActive("/events")}`}>Events</Link>
+          </li>
+          <li className="navbar-item">
+            <Link to="/cgpa" className={`navbar-link ${isActive("/cgpa")}`}>CGPA</Link>
+          </li>
+          <li className="navbar-item">
+            <Link to="/messages" className={`navbar-link ${location.pathname.startsWith("/messages") ? "active" : ""}`}>Messages</Link>
           </li>
         </ul>
 
