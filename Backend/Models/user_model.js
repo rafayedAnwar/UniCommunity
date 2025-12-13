@@ -26,6 +26,12 @@ const userSchema = new Schema(
         name: { type: String, required: true },
       },
     ],
+    badges: [
+      {
+        badgeId: { type: String, required: true },
+        dateEarned: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );

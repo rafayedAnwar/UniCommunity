@@ -1,10 +1,13 @@
 const DiscussionThread = require('../Models/discussion_thread_model');
 
+const { checkHelloWorldBadge } = require("./badge_utils");
 // POST Request to post a new discussion thread
 const postDiscussionThread = async (req, res) => {
     const { course_code, posted_by, header_text, main_text } = req.body;
     try {
         const thread = await DiscussionThread.create({ course_code, posted_by, header_text, main_text });
+        // Award Hello World badge for discussion post
+        if (posted_by) await checkHelloWorldBadge(posted_by);
         res.status(201).json(thread);
     } catch (error) {
         res.status(400).json({ error: error.message });

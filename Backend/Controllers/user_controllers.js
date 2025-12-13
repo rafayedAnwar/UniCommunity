@@ -25,6 +25,7 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+const { checkProfileBadges } = require("./badge_utils");
 // PUT Request to update user profile
 const updateUserProfile = async (req, res) => {
   try {
@@ -44,6 +45,8 @@ const updateUserProfile = async (req, res) => {
     if (completedCourses) user.completedCourses = completedCourses;
 
     await user.save();
+    // Check for profile completion badge
+    await checkProfileBadges(user._id);
 
     res.status(200).json(user);
   } catch (error) {
@@ -64,9 +67,24 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// GET Request to get a user's badges
+const getUserBadges = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(user.badges || []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getCurrentUser,
   getUserProfile,
   updateUserProfile,
   getAllUsers,
+  getUserBadges,
 };

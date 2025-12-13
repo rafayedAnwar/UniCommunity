@@ -33,6 +33,7 @@ const getForumByCourse = async (req, res) => {
   }
 };
 
+const { checkHelloWorldBadge } = require("./badge_utils");
 // POST Request to create a new forum
 const createForum = async (req, res) => {
   try {
@@ -52,6 +53,9 @@ const createForum = async (req, res) => {
       description: description || "",
       members: [userId],
     });
+
+    // Award Hello World badge for forum creation
+    if (userId) await checkHelloWorldBadge(userId);
 
     res.status(201).json(forum);
   } catch (error) {
@@ -114,6 +118,9 @@ const uploadResource = async (req, res) => {
 
     forum.resources.push(resource);
     await forum.save();
+
+    // Award Hello World badge for resource upload
+    if (userId) await checkHelloWorldBadge(userId);
 
     res.status(201).json(forum);
   } catch (error) {

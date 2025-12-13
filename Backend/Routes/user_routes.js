@@ -5,6 +5,7 @@ const {
   updateUserProfile,
   getAllUsers,
   getCurrentUser,
+  getUserBadges,
 } = require("../Controllers/user_controllers");
 
 // GET request to get all users
@@ -15,6 +16,10 @@ router.get("/current", getCurrentUser)
 
 // GET request to get user profile by ID
 router.get("/:userId", getUserProfile);
+
+// PUT request to update user profile
+// GET request to get user badges
+router.get("/:userId/badges", getUserBadges);
 
 // PUT request to update user profile
 router.put("/:userId", updateUserProfile);

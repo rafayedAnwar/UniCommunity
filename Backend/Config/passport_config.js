@@ -1,6 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const user = require("../Models/user_model");
+const { checkSignupBadge } = require("../Controllers/badge_utils");
 
 const BRACU_DOMAIN = "g.bracu.ac.bd";
 
@@ -33,9 +34,11 @@ passport.use(
           message: "Unauthorized domain, use your BRACU mail",
         });
       }
-      const currentUser = await user.findOne({ googleId: profile.id });
+      let currentUser = await user.findOne({ googleId: profile.id });
       if (currentUser) {
         // already have this user
+        // Award signup badge if not already earned
+        await checkSignupBadge(currentUser._id);
         return done(null, currentUser);
       } else {
         // if not, create user in our db
@@ -46,6 +49,8 @@ passport.use(
           email: profile.emails[0].value,
           photo: profile.photos[0].value,
         }).save();
+        // Award signup badge
+        await checkSignupBadge(newUser._id);
         return done(null, newUser);
       }
     }

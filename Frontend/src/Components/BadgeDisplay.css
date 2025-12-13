@@ -1,0 +1,37 @@
+.badge-section {
+  margin: 2rem 0;
+}
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.badge-item {
+  background: #f7f7fa;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+}
+.badge-item:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+}
+.badge-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+.badge-info {
+  display: flex;
+  flex-direction: column;
+}
+.badge-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.badge-date {
+  font-size: 0.9rem;
+  color: #888;
+}

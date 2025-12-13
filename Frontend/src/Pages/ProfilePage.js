@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../CSS/profilePage.css";
+import BadgeDisplay from "../Components/BadgeDisplay";
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -23,11 +24,30 @@ const ProfilePage = () => {
 
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [badges, setBadges] = useState([]);
 
   useEffect(() => {
     // Fetch current authenticated user first
     fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    if (userId) fetchBadges();
+    // eslint-disable-next-line
+  }, [userId]);
+  const fetchBadges = async () => {
+    try {
+      const response = await fetch(`http://localhost:1760/api/users/${userId}/badges`, {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setBadges(data);
+      }
+    } catch (error) {
+      setBadges([]);
+    }
+  };
 
   const fetchCurrentUser = async () => {
     try {
@@ -219,6 +239,8 @@ const ProfilePage = () => {
       </div>
 
       <div className="profile-content">
+        {/* Badges Section */}
+        <BadgeDisplay badges={badges} />
         {/* Basic Info Section */}
         <section className="profile-section">
           <h2>Basic Information</h2>
