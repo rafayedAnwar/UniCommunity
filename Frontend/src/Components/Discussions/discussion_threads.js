@@ -16,7 +16,7 @@ const DiscussionThreads = ({thread, currentUser}) => {
     const handleLike = async () => {
         if (!currentUser) { toast.error("Log in first to Like"); return}
 
-        const response = await fetch(`http://localhost:1688/api/discussions/like/${thread._id}`, 
+        const response = await fetch(`http://localhost:1760/api/discussions/like/${thread._id}`, 
             {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -34,7 +34,7 @@ const DiscussionThreads = ({thread, currentUser}) => {
     const handleDislike = async () => {
         if (!currentUser) { toast.error("Log in first to Dislike"); return}
 
-        const response = await fetch(`http://localhost:1688/api/discussions/dislike/${thread._id}`, 
+        const response = await fetch(`http://localhost:1760/api/discussions/dislike/${thread._id}`, 
             {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },

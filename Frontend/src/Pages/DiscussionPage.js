@@ -25,7 +25,7 @@ const DiscussionPage = () => {
     useEffect(() => {
         if (!courseSelected) return;
 
-        fetch(`http://localhost:1688/api/discussions/${courseSelected}`)
+        fetch(`http://localhost:1760/api/discussions/${courseSelected}`)
             .then(result => result.json())
             .then(data => setThreads(data))
             .catch(err => console.error(err));
@@ -70,3 +70,5 @@ const DiscussionPage = () => {
         </div>
     );
 }
+
+export default DiscussionPage

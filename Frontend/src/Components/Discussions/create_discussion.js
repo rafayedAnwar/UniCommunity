@@ -28,7 +28,7 @@ const CreateDiscussion = ({courseSelected, currentUser}) => {
             return;}
 
         const Discussion = { course_code: courseSelected, posted_by: currentUser._id, header_text, main_text}
-        const postResponse = await fetch('http://localhost:1688/api/discussions/create', {
+        const postResponse = await fetch('http://localhost:1760/api/discussions/create', {
             method: 'POST',
             body: JSON.stringify(Discussion),
             headers: {'Content-Type': 'application/json'}
