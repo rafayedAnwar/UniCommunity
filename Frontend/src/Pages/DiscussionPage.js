@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import SearchBar from "../Components/Discussions/searchbar.js"
 import CourseBlock from "../Components/Discussions/course_block.js"
 import CreateDiscussion from "../Components/Discussions/create_discussion.js"
+import DiscussionThreads from "../Components/Discussions/discussion_threads.js"
 
 
 //importing icons from react-icons library
@@ -20,6 +21,7 @@ const DiscussionPage = () => {
     const [courseSelected, setCourseSelected] = useState(null)
     const [searchInput, setSearchInput] = useState("")
     const [currentUser, setCurrentUser] = useState(null)
+    const [Threads, setThreads] = useState([])
 
     useEffect(() => {
         fetch("http://localhost:1688/api/users/current", {
@@ -31,6 +33,15 @@ const DiscussionPage = () => {
         })
         .catch(err => console.error(err));
     }, []);
+
+    useEffect(() => {
+        if (!courseSelected) return;
+
+        fetch(`http://localhost:1688/api/discussions/${courseSelected}`)
+            .then(result => result.json())
+            .then(data => setThreads(data))
+            .catch(err => console.error(err));
+        }, [courseSelected]);
 
     return (
         <div className="Main-Container">
@@ -58,8 +69,13 @@ const DiscussionPage = () => {
             </div>
             {courseSelected &&(
                 <div>
-                <CourseBlock courseSelected={courseSelected}/>
-                <CreateDiscussion courseSelected={courseSelected} currentUser={currentUser} />
+                    <CourseBlock courseSelected={courseSelected}/>
+                    <CreateDiscussion courseSelected={courseSelected} currentUser={currentUser} />
+                    <div className="discussion-threads-container">
+                            {Threads.map((thread) => (
+                                <DiscussionThreads key={thread._id} thread={thread} currentUser={currentUser} />
+                            ))}
+                    </div>
                 </div>
             )}            
              

@@ -22,6 +22,63 @@ const getallDiscussionThreads = async (req, res) => {
     }   
 }
 
-module.exports = { postDiscussionThread, getallDiscussionThreads };
+const likeThread = async (req, res) => {
+    const { threadId } = req.params;
+    const { userId } = req.body;
+
+    try {
+        const thread = await DiscussionThread.findById(threadId);
+        if (!thread) {
+            return res.status(404).json({ message: "Thread not found" });}
+
+        // Remove from dislikes if exists
+        thread.dislikes = thread.dislikes.filter(
+            id => id.toString() !== userId);
+
+        // Toggle like
+        if (thread.likes.includes(userId)) {
+            thread.likes = thread.likes.filter(
+                id => id.toString() !== userId);
+                
+        } else {thread.likes.push(userId);}
+        
+        await thread.save();
+            res.status(200).json(thread);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+const dislikeThread = async (req, res) => {
+    const { threadId } = req.params;
+    const { userId } = req.body;
+
+    try {
+        const thread = await DiscussionThread.findById(threadId);
+        if (!thread) {
+            return res.status(404).json({ message: "Thread not found" });
+        }
+
+        // Remove from likes if exists
+        thread.likes = thread.likes.filter(
+            id => id.toString() !== userId
+        );
+        // Toggle dislike
+        if (thread.dislikes.includes(userId)) {
+            thread.dislikes = thread.dislikes.filter(
+                id => id.toString() !== userId
+            );
+        } else {
+            thread.dislikes.push(userId);
+        }
+
+        await thread.save();
+            res.status(200).json(thread);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+module.exports = { postDiscussionThread, getallDiscussionThreads, likeThread, dislikeThread };
 
 

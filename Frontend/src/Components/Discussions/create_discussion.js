@@ -44,8 +44,7 @@ const CreateDiscussion = ({courseSelected, currentUser}) => {
             console.log("Error details:", errorData);
             setWriting(false);
         }    
-        }
-
+    }
 
     return (
         <div className="discussion-container">
