@@ -1,0 +1,53 @@
+.thread-block{
+    background-color: white;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    border-radius: 5px;
+    margin: 15px auto;
+    box-shadow: 0 0px 8px #2776ea;
+    padding: 15px;
+}
+
+.header {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.main {
+    margin-top: 1px;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+
+.interactives {
+    display: flex;
+    align-items: center;
+    gap: 25px;      /* spacing between items */
+}
+
+.uptrend-icon {
+    height: 30px;
+    width: 30px;
+    color: lightgreen;
+    margin-left: 20px;
+}
+.downtrend-icon {
+    height: 30px;
+    width: 30px;
+    color: #FF7F7F;
+    margin-left: 20px;
+}
+.comment-icon {
+    height: 30px;
+    width: 30px;
+    color: #2776ea;
+    margin-left: 320px;
+}
+
+
+
