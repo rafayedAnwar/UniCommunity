@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;    
-    gap: 20px;                
+    gap: 20px;               
 }
 
 .expand-text-container {
@@ -12,7 +12,7 @@
     gap: 5px;                
 }
 .expand-text {
-    font-size: 28px;
+    font-size: 20px;
     display: flex;
     background-color: white;
     width: 100%;
@@ -22,22 +22,26 @@
     align-items: center;
     border-radius: 10px;
     margin-left: 10px;
+    margin-top: -20px;
+    box-shadow: 0 5px 10px #2776ea;
 }
 
 .expand-button {
     color: #2776ea;
     height: 80px;
     width: 80px;
+    margin-top: -15px;
 }
 .close-button {
     color: #2776ea;
     height: 60px;
     width: 60px;
     align-self: flex-end;
-    margin-right: 26%;
+    margin-right: 19%;
 }
 
 .discussion-form {
+    margin-top: -90px;
     max-width: 900px;
     display: flex;
     border-radius: 10px;

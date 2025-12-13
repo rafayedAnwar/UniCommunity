@@ -51,7 +51,10 @@ const DiscussionThreads = ({thread, currentUser}) => {
 
     return (
         <div className="thread-block">
-            <p className="created-by">Created by: {currentUser.firstName} {currentUser.lastName}</p>
+            <p className="created-by"><img src={`${currentUser.photo}=s96`} 
+                                           referrerPolicy='no-referrer' 
+                                           crossOrigin="anonymous"
+                                           className='user-photo'/>{currentUser.firstName} {currentUser.lastName}</p>
             <p className="header">{thread.header_text}</p>
             <p className="main">{thread.main_text}</p>
             <div className='interactives'>

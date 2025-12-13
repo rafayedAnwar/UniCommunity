@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
-import Icon from "../Assets/icon-gray.png";
+import Icon from "../Assets/icon-navy-blue.png";
 
 const Navbar = () => {
   const location = useLocation();

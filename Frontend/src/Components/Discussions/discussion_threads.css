@@ -11,6 +11,20 @@
     padding: 15px;
 }
 
+.created-by {
+    display: flex;
+    align-items: center;
+}
+
+.user-photo {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+
+}
+
 .header {
     font-size: 30px;
     font-weight: bold;
@@ -35,13 +49,22 @@
     width: 30px;
     color: lightgreen;
     margin-left: 20px;
+    margin-right: 7px;
 }
 .downtrend-icon {
     height: 30px;
     width: 30px;
     color: #FF7F7F;
     margin-left: 20px;
+    margin-right: 7px;
 }
+
+.likes, .dislikes {
+    display: flex;
+    align-items: center;
+
+}
+
 .comment-icon {
     height: 30px;
     width: 30px;

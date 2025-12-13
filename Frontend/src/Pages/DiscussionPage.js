@@ -43,15 +43,7 @@ const DiscussionPage = () => {
         }, [courseSelected]);
 
     return (
-        <div className="Main-Container">
-            <div className="header-block">
-                <div className="icon-container">
-                    <Link to="/discussion"><img src={Icon} alt="Icon" className="icon" /></Link>
-                </div>
-                <div className="header-text"><h1>Search for Discussions</h1></div>
-                <Link to="/profile" className="profile-link"><FaUser className="profile-icon" title="Profile"/></Link>
-                <Link to="/" className="logout-link"><HiOutlineLogout className="logout-icon" title="Logout"/></Link>
-            </div>
+        <div className="main-container">
             <div className="searchbar-container">
                 <SearchBar setResults={setResults} input={searchInput} setInput={setSearchInput} />
                 <div className="search-results">
