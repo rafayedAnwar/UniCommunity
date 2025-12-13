@@ -37,9 +37,12 @@ const ProfilePage = () => {
   }, [userId]);
   const fetchBadges = async () => {
     try {
-      const response = await fetch(`http://localhost:1760/api/users/${userId}/badges`, {
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:1760/api/users/${userId}/badges`,
+        {
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setBadges(data);
@@ -61,6 +64,7 @@ const ProfilePage = () => {
           firstName: userData.firstName || "",
           lastName: userData.lastName || "",
           email: userData.email || "",
+          photo: userData.photo || "",
           bio: userData.bio || "",
           linkedIn: userData.socialLinks?.linkedIn || "",
           github: userData.socialLinks?.github || "",
@@ -94,6 +98,7 @@ const ProfilePage = () => {
         firstName: data.firstName || "",
         lastName: data.lastName || "",
         email: data.email || "",
+        photo: data.photo || "",
         bio: data.bio || "",
         linkedIn: data.socialLinks?.linkedIn || "",
         github: data.socialLinks?.github || "",
@@ -240,15 +245,28 @@ const ProfilePage = () => {
 
       <div className="profile-content">
         {/* Profile Photo */}
-        <div style={{ display: "flex", alignItems: "center", marginBottom: 24 }}>
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: 24 }}
+        >
           <img
-            src={profile.photo || `https://ui-avatars.com/api/?name=${profile.firstName}`}
+            src={
+              profile.photo ||
+              `https://ui-avatars.com/api/?name=${profile.firstName}`
+            }
             alt={profile.firstName}
-            style={{ width: 100, height: 100, borderRadius: "50%", marginRight: 24, objectFit: "cover" }}
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: "50%",
+              marginRight: 24,
+              objectFit: "cover",
+            }}
           />
           <div>
-            <h2 style={{ margin: 0 }}>{profile.firstName} {profile.lastName}</h2>
-            <div style={{ color: '#888', fontSize: 16 }}>{profile.email}</div>
+            <h2 style={{ margin: 0 }}>
+              {profile.firstName} {profile.lastName}
+            </h2>
+            <div style={{ color: "#888", fontSize: 16 }}>{profile.email}</div>
           </div>
         </div>
         {/* Badges Section */}
