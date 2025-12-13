@@ -23,6 +23,17 @@ const DiscussionPage = () => {
     const [Threads, setThreads] = useState([])
 
     useEffect(() => {
+        fetch("http://localhost:1760/api/users/current", {
+            credentials: "include", // important for session-based auth
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.user) setCurrentUser(data.user);
+        })
+        .catch(err => console.error(err));
+    }, []);
+
+    useEffect(() => {
         if (!courseSelected) return;
 
         fetch(`http://localhost:1760/api/discussions/${courseSelected}`)
