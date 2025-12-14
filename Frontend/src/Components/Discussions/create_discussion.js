@@ -69,9 +69,10 @@ const CreateDiscussion = ({courseSelected, currentUser}) => {
                              onInput={handleTextareaInput}
                              value={main_text}
                              rows={3}/>
-                <button type="submit" 
+                <div className="post-cancel"><button type="submit" 
                              className="submit-button">Post Discussion
-                            </button>
+                            </button> 
+                            <button className="cancel-button" title="Cancel" onClick={() => setWriting(false)}>Cancel</button></div>
             </form>)}
 
       <ToastContainer
