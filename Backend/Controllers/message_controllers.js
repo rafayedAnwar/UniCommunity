@@ -16,7 +16,11 @@ const sendMessage = async (req, res) => {
     if (!recipient) {
       return res.status(404).json({ error: "Recipient not found" });
     }
-    const message = await Message.create({ sender: senderId, recipient: recipientId, content });
+    const message = await Message.create({
+      sender: senderId,
+      recipient: recipientId,
+      content,
+    });
     res.status(201).json(message);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -32,8 +36,7 @@ const getConversation = async (req, res) => {
         { sender: userId1, recipient: userId2 },
         { sender: userId2, recipient: userId1 },
       ],
-    })
-      .sort({ createdAt: 1 });
+    }).sort({ createdAt: 1 });
     res.status(200).json(messages);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -52,7 +55,8 @@ const getUserConversations = async (req, res) => {
     const users = new Set();
     messages.forEach((msg) => {
       if (msg.sender.toString() !== userId) users.add(msg.sender.toString());
-      if (msg.recipient.toString() !== userId) users.add(msg.recipient.toString());
+      if (msg.recipient.toString() !== userId)
+        users.add(msg.recipient.toString());
     });
     res.status(200).json(Array.from(users));
   } catch (error) {
@@ -60,4 +64,42 @@ const getUserConversations = async (req, res) => {
   }
 };
 
-module.exports = { sendMessage, getConversation, getUserConversations };
+// Delete a specific message
+const deleteMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const message = await Message.findByIdAndDelete(messageId);
+    if (!message) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+    res.status(200).json({ message: "Message deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Delete entire conversation between two users
+const deleteConversation = async (req, res) => {
+  try {
+    const { userId1, userId2 } = req.params;
+    const result = await Message.deleteMany({
+      $or: [
+        { sender: userId1, recipient: userId2 },
+        { sender: userId2, recipient: userId1 },
+      ],
+    });
+    res
+      .status(200)
+      .json({ message: `Deleted ${result.deletedCount} messages` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  sendMessage,
+  getConversation,
+  getUserConversations,
+  deleteMessage,
+  deleteConversation,
+};
