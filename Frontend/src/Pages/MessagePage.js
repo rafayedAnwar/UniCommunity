@@ -40,8 +40,8 @@ const MessagePage = () => {
 
   useEffect(() => {
     if (!currentUser) return;
-    const fetchMessages = async () => {
-      setLoading(true);
+    const fetchMessages = async (isInitialLoad = false) => {
+      if (isInitialLoad) setLoading(true);
       try {
         const res = await fetch(
           `http://localhost:1760/api/messages/conversation/${currentUser._id}/${userId}`,
@@ -52,12 +52,12 @@ const MessagePage = () => {
       } catch (err) {
         setError("Could not load messages");
       } finally {
-        setLoading(false);
+        if (isInitialLoad) setLoading(false);
       }
     };
-    fetchMessages();
-    // Optionally, poll for new messages every 5s
-    const interval = setInterval(fetchMessages, 5000);
+    fetchMessages(true);
+    // Poll for new messages every 5s without showing loading state
+    const interval = setInterval(() => fetchMessages(false), 5000);
     return () => clearInterval(interval);
   }, [currentUser, userId]);
 
