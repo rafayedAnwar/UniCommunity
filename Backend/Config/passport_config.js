@@ -24,19 +24,40 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:1760/api/auth/google/callback",
+      scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       // check if user already exists in our db
       const userEmail = profile.emails[0].value;
+
+      // Debug: Log what Google returns
+      console.log("Google Profile Data:", {
+        id: profile.id,
+        email: userEmail,
+        photos: profile.photos,
+        hasPhotos: !!profile.photos,
+        photoUrl: profile.photos?.[0]?.value,
+      });
+
       if (!userEmail.endsWith(`@${BRACU_DOMAIN}`)) {
         console.log("Unauthorized domain login attempt:", userEmail);
         return done(null, false, {
           message: "Unauthorized domain, use your BRACU mail",
         });
       }
+
+      const photoUrl =
+        profile.photos && profile.photos[0] ? profile.photos[0].value : null;
+
       let currentUser = await user.findOne({ googleId: profile.id });
       if (currentUser) {
         // already have this user
+        // Update photo if available from Google
+        if (photoUrl) {
+          currentUser.photo = photoUrl;
+          await currentUser.save();
+          console.log("Updated user photo:", photoUrl);
+        }
         // Award signup badge if not already earned
         await checkSignupBadge(currentUser._id);
         return done(null, currentUser);
@@ -47,8 +68,9 @@ passport.use(
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           email: profile.emails[0].value,
-          photo: profile.photos[0].value,
+          photo: photoUrl || "",
         }).save();
+        console.log("Created new user with photo:", photoUrl);
         // Award signup badge
         await checkSignupBadge(newUser._id);
         return done(null, newUser);

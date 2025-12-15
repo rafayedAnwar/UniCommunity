@@ -50,17 +50,32 @@ const UserSearchPage = () => {
           <div className="search-result-card" key={user._id}>
             <div className="search-card-photo-wrap">
               <img
-                src={user.photo || `https://ui-avatars.com/api/?name=${user.firstName}`}
+                src={
+                  user.photo && user.photo.trim() !== ""
+                    ? user.photo
+                    : `https://ui-avatars.com/api/?name=${user.firstName}`
+                }
                 alt={user.firstName}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `https://ui-avatars.com/api/?name=${user.firstName}`;
+                }}
                 className="search-user-photo"
               />
             </div>
             <div className="search-user-info">
-              <div className="search-user-name">{user.firstName} {user.lastName}</div>
+              <div className="search-user-name">
+                {user.firstName} {user.lastName}
+              </div>
               <div className="search-user-email">{user.email}</div>
               <div className="search-user-actions">
-                <a href={`/profile/${user._id}`} className="view-profile-link">View Profile</a>
-                <a href={`/messages/${user._id}`} className="message-link">Message</a>
+                <a href={`/profile/${user._id}`} className="view-profile-link">
+                  View Profile
+                </a>
+                <a href={`/messages/${user._id}`} className="message-link">
+                  Message
+                </a>
               </div>
             </div>
           </div>

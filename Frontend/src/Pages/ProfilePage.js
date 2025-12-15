@@ -250,10 +250,16 @@ const ProfilePage = () => {
         >
           <img
             src={
-              profile.photo ||
-              `https://ui-avatars.com/api/?name=${profile.firstName}`
+              profile.photo && profile.photo.trim() !== ""
+                ? profile.photo
+                : `https://ui-avatars.com/api/?name=${profile.firstName}`
             }
             alt={profile.firstName}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://ui-avatars.com/api/?name=${profile.firstName}`;
+            }}
             style={{
               width: 100,
               height: 100,
