@@ -24,9 +24,10 @@ const SearchBar = ({ setResults, input, setInput }) => {
   };
 
   return (
-    <div className="search-bar">
+    <div className="search-bar" title="Search">
       <IoSearchCircleSharp className="search-icon" />
       <input
+        title="Search"
         placeholder="e.g. CSE471"
         value={input}
         onChange={(e) => handleChange(e.target.value)}
