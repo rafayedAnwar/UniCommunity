@@ -1,9 +1,9 @@
 .search-bar {
     width: 100%;
     max-width: 500px;
-    height: 4.5rem;
+    height: 60px;
     margin: 0 auto;
-    padding: 0 15px;
+    /*padding: 0 15px;*/
     box-sizing: border-box;
     background-color: white;
     border-radius: 10px;
@@ -28,6 +28,6 @@ input:focus {
 
 .search-icon {
     color: #2776ea;
-    width: 70px;
     height: 70px;
+    width: 70px;
 }
