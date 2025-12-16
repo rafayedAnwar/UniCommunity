@@ -1,20 +1,19 @@
-import "../CSS/discussionPage.css";
+import "../CSS/reviewPage.css"
 import { useState, useEffect } from "react";
 
-//importing components
+
+//import components:
 import SearchBar from "../Components/Discussions/searchbar.js"
-import CourseBlock from "../Components/Discussions/course_block.js"
-import CreateDiscussion from "../Components/Discussions/create_discussion.js"
-import DiscussionThreads from "../Components/Discussions/discussion_threads.js"
+import ReviewBlock from "../Components/Reviews/Review_block.js"
 
-
-const DiscussionPage = () => {
+const ReviewPage = () => {
     const [results, setResults] = useState([]);
     const [courseSelected, setCourseSelected] = useState(null)
     const [searchInput, setSearchInput] = useState("")
     const [currentUser, setCurrentUser] = useState(null)
-    const [Threads, setThreads] = useState([])
+    const [reviews, setReviews] = useState([])
 
+    
     useEffect(() => {
         fetch("http://localhost:1760/api/users/current", {
             credentials: "include", // important for session-based auth
@@ -25,15 +24,32 @@ const DiscussionPage = () => {
         })
         .catch(err => console.error(err));
     }, []);
-
+    
     useEffect(() => {
-        if (!courseSelected) return;
+  if (!courseSelected) {
+    fetch(`http://localhost:1760/api/reviews/all`)
+      .then((res) => res.json())
+      .then((data) => setReviews(Array.isArray(data) ? data : []))
+      .catch((err) => console.error(err));
+  } else {
+    fetch(`http://localhost:1760/api/reviews/${courseSelected}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setReviews(data);
+        } else if (data && !data.error) {
+          // single review object
+          setReviews([data]);
+        } else {
+          // error or no review
+          setReviews([]);
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+}, [courseSelected]);
 
-        fetch(`http://localhost:1760/api/discussions/${courseSelected}`)
-            .then(result => result.json())
-            .then(data => setThreads(data))
-            .catch(err => console.error(err));
-        }, [courseSelected]);
+
 
     return (
         <div className="main-container">
@@ -51,20 +67,13 @@ const DiscussionPage = () => {
                                 </div>})}
                 </div>
             </div>
-            {courseSelected &&(
-                <div>
-                    <CourseBlock courseSelected={courseSelected}/>
-                    <CreateDiscussion courseSelected={courseSelected} currentUser={currentUser} />
-                    <div className="discussion-threads-container">
-                            {Threads.map((thread) => (
-                                <DiscussionThreads key={thread._id} thread={thread} currentUser={currentUser} />
-                            ))}
-                    </div>
-                </div>
-            )}            
-             
-        </div>
+            <div>
+                {reviews.length === 0 ? (
+                    <p>No reviews yet for this course.</p>) 
+                : (reviews.map((review) => (<ReviewBlock key={review._id} review={review} currentUser={currentUser} />)))}
+                </div>            
+            </div>
     );
-}
+} 
 
-export default DiscussionPage
+export default ReviewPage

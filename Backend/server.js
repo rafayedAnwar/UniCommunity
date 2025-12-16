@@ -32,19 +32,19 @@ const cgpaRoutes = require("./Routes/cgpa_routes");
 const reviewRoutes = require("./Routes/review_routes");
 const authRoutes = require("./Routes/auth_routes");
 const userRoutes = require("./Routes/user_routes");
-
 const forumRoutes = require("./Routes/forum_routes");
 const discussionRoutes = require("./Routes/discussion_routes");
 const courseRoutes = require("./Routes/course_routes");
 const messageRoutes = require("./Routes/message_routes");
 const messagesOverviewRoutes = require("./Routes/messages_overview_routes");
 
+
+
 app.use("/api/events", eventRoutes);
 app.use("/api/cgpa", cgpaRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
 app.use("/api/forums", forumRoutes);
 app.use("/api/discussions", discussionRoutes);
 app.use("/api/courses", courseRoutes);

@@ -5,6 +5,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+
 import Navbar from "./Components/Navbar";
 import LoginPage from "./Pages/LoginPage";
 import ProfilePage from "./Pages/ProfilePage";
@@ -14,6 +15,7 @@ import UserSearchPage from "./Pages/UserSearchPage";
 import PublicProfilePage from "./Pages/PublicProfilePage";
 import MessagePage from "./Pages/MessagePage";
 import MessagesOverviewPage from "./Pages/MessagesOverviewPage";
+import ReviewPage from "./Pages/ReviewPage";
 
 function AppContent() {
   const location = useLocation();
@@ -33,6 +35,7 @@ function AppContent() {
         <Route path="/profile/:userId" element={<PublicProfilePage />} />
         <Route path="/messages" element={<MessagesOverviewPage />} />
         <Route path="/messages/:userId" element={<MessagePage />} />
+        <Route path="/reviews" element={<ReviewPage />}/>
       </Routes>
     </div>
   );
