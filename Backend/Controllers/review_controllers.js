@@ -16,7 +16,7 @@ const getReviewByCourseId = async (req, res) => {
     try {
         const {courseId} = req.params
         const review = await CourseReview.findOne({courseId: courseId})
-        if (review.length === 0) {
+        if (!review) {
             return res.status(404).json({error: 'No review found for this course ID'})
         }    
         res.status(200).json(review)
@@ -33,15 +33,15 @@ const updateCourseReview = async (review) => {
             {
                 $inc: {
                     reviewCount: 1,
-                    theory_mem_total: review.theory_mem_rating,
-                    lab_difficulty_total: review.lab_difficulty_rating,
-                    assignment_difficulty_total: review.assignment_difficulty_rating,
-                    project_difficulty_total: review.project_difficulty_rating,
-                    resources_availability_total: review.resources_availability_rating
+                    theory_total: review.theory,
+                    lab_total: review.lab,
+                    assignment_total: review.assignment,
+                    project_total: review.project,
+                    resources_total: review.resources
                 },
                 $push: {
                     writtenReviews: {
-                        userId: review.userId,
+                        userId: review.reviewed_by,
                         text: review.written_review
                     }        
                 }
@@ -54,17 +54,17 @@ const updateCourseReview = async (review) => {
 
 // POST Request to create a new review
 const createReview = async (req, res) => {
-    const {userId, courseId, theory_mem_rating, 
-           lab_difficulty_rating, assignment_difficulty_rating,
-           project_difficulty_rating, resources_availability_rating, written_review
-           } = req.body
+    const {courseId, theory, 
+        lab, assignment,
+        project, resources, written_review
+        } = req.body
+    
+    const reviewed_by = req.user?._id || req.user?.id
+    if (!reviewed_by) {return res.status(401).json({ error: 'User not authenticated' })}    
 
     try {
         const review = await AddReview.create(
-            {userId, courseId, theory_mem_rating, 
-           lab_difficulty_rating, assignment_difficulty_rating,
-           project_difficulty_rating, resources_availability_rating, written_review})
-        
+            {courseId, reviewed_by, theory, lab, assignment, project, resources, written_review})
 
         await updateCourseReview(review)
         res.status(201).json(review)

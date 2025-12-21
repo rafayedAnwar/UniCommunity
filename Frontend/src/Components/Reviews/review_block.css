@@ -13,8 +13,8 @@
     padding-left: 30px;
     height: 250px;
     background-color: white;
-    box-shadow: 0 2px 6px #6bdb6b;
-    margin-bottom: 5px;
+    box-shadow: 0 0px 8px #2776ea;
+    margin-bottom: 12px;
 }
 
 .course-info {
@@ -24,7 +24,7 @@
 }
 
 .course-code{
-    color: #175d17;
+    color: #000068;
     font-size: 38px;
     margin-top: 20px;
 }
@@ -38,29 +38,105 @@
     transform: scale(1.3);
 }
 
-
 .add-review{
-    background: #6b6bdb;
+    background: #a64dff;
     border-radius: 5px;
-    width: 190px;
+    width: 220px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
+    cursor: pointer;
 }
 .view-review{
-    background: #6bdb6b;
+    background: #4d4dff;
     border-radius: 5px;
-    width: 190px;
+    width: 220px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
+    cursor: pointer;
 }
 
 .down, .plus {
     height: 25px;
     width: 25px;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.review-extend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 50%;
+    background-color: white;
+    box-shadow: 0 0px 8px #2776ea;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.rating-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 30%;
+  border: 1px solid #2776ea;
+  background: white;
+  cursor: pointer;
+}
+
+.rating-btn.active {
+  background: #2776ea;
+  color: white;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.rating-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+  flex: 1 1 auto;
+}
+
+.rating-row p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.review-form textarea {
+  width: 100%;
+  min-height: 100px;
+  margin-top: 10px;
+  flex-basis: 100%; /* Forces textarea to take full width on new line */
+}
+
+.submit-review {
+  border-radius: 10px;
+  background-color: #2776ea;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  flex-basis: 100%; /* Forces button to take full width on new line */
+  margin-top: 10px;
 }
