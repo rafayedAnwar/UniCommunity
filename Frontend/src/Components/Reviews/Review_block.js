@@ -5,6 +5,8 @@ import { IoIosAddCircle } from "react-icons/io";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import TextReview from "./text_review.js"
+
 
 //for radar chart
 import React, { useState } from 'react';
@@ -23,7 +25,7 @@ const ReviewBlock = ({review, currentUser}) => {
     //for review form
     const [ratings, setRatings] = useState({ theory: 0, lab: 0, assignment: 0, project: 0, resources: 0,});
     const [textReview, setTextReview] = useState('');
-    
+
     //for radar chart
     const data = 
       {labels: ['Theory', 'Lab', 'Assignment', 'Project', 'Resources'],
@@ -77,7 +79,6 @@ const ReviewBlock = ({review, currentUser}) => {
         setReviewing(false); setTextReview(''); setRatings({ theory: 0, lab: 0, assignment: 0, project: 0, resources: 0, });
       } catch (err) { console.error(err.message);}
     };
-  
 
     //main return
     return (
@@ -86,40 +87,49 @@ const ReviewBlock = ({review, currentUser}) => {
                 <div className='course-info'>
                     <div className='course-code' title='Course Code'>{review.courseId}</div>
                     <div className='title' title='Course Title'>{review.courseTitle}</div>
-                    <div className='add-review' onClick={() => setReviewing(prev => !prev)}>Add Your Review <IoIosAddCircle className='plus'/></div>
-                    <div className='view-review' onClick={() => setComment(prev => !prev)} >See Individual Reviews <IoChevronDownCircle className='down' /></div>
+                    <div className='add-review' onClick={() => {setReviewing(prev => !prev); setComment(false);}}>Add Your Review <IoIosAddCircle className='plus'/></div>
+                    <div className='view-review' onClick={() => {setComment(prev => !prev); setReviewing(false)}} >See Individual Reviews <IoChevronDownCircle className='down' /></div>
                 </div>
                 <Radar data={data} options={options} className='radar'/>
             </div>
             {(reviewing || comment) && (
-            <div className='review-extend'>
-              {reviewing && (
-                <form className='review-form' onSubmit={handleSubmit}>
-                  <RatingInput label="Rate Theory difficulty:" value={ratings.theory} onChange={(val) => setRatings(prev => ({ ...prev, theory: val }))} />
-                  <RatingInput label="Rate Lab difficulty:" value={ratings.lab} onChange={(val) => setRatings(prev => ({ ...prev, lab: val }))} />
-                  <RatingInput label="Rate Assignment difficulty:" value={ratings.assignment} onChange={(val) => setRatings(prev => ({ ...prev, assignment: val }))} />
-                  <RatingInput label="Rate Project difficulty:" value={ratings.project} onChange={(val) => setRatings(prev => ({ ...prev, project: val }))} />
-                  <RatingInput label="Rate Resource Availability:" value={ratings.resources} onChange={(val) => setRatings(prev => ({ ...prev, resources: val }))} />
-                  <textarea label="Optional:"placeholder='Describe your course experience/opinion:' value={textReview} onChange={(e) => setTextReview(e.target.value)}/>
-                  <button type="submit" className="submit-review"> Submit Review</button>
-                </form>
-              )}
-              {comment && <div>all reviews</div>}
-            </div>)}
-          <ToastContainer
-            position="top-right"
-            autoClose={3000} // closes after 3 seconds
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-              />  
+              <div className='review-extend'>
+                {reviewing && (
+                  <form className='review-form' onSubmit={handleSubmit}>
+                    <RatingInput label="Rate Theory difficulty:" value={ratings.theory} onChange={(val) => setRatings(prev => ({ ...prev, theory: val }))} />
+                    <RatingInput label="Rate Lab difficulty:" value={ratings.lab} onChange={(val) => setRatings(prev => ({ ...prev, lab: val }))} />
+                    <RatingInput label="Rate Assignment difficulty:" value={ratings.assignment} onChange={(val) => setRatings(prev => ({ ...prev, assignment: val }))} />
+                    <RatingInput label="Rate Project difficulty:" value={ratings.project} onChange={(val) => setRatings(prev => ({ ...prev, project: val }))} />
+                    <RatingInput label="Rate Resource Availability:" value={ratings.resources} onChange={(val) => setRatings(prev => ({ ...prev, resources: val }))} />
+                    <textarea className='text-box' placeholder='Describe your course experience/opinion:' value={textReview} onChange={(e) => setTextReview(e.target.value)}/>
+                    <button type="submit" className="submit-review"> Submit Review</button>
+                  </form>
+                )}
+                {comment && (
+                  <div className="written-reviews-container">
+                    {review.writtenReviews && review.writtenReviews.length > 0 ? (
+                      review.writtenReviews.map((writtenReview, index) => (
+                        <TextReview key={index} written={writtenReview}/>
+                      ))
+                    ) : (
+                      <p className="no-reviews">No written reviews yet.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+            <ToastContainer
+              position="top-right"
+              autoClose={3000} // closes after 3 seconds
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />  
         </div>
-)
+      )
 }
 export default ReviewBlock
-
-

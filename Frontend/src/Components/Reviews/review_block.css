@@ -140,3 +140,24 @@
   flex-basis: 100%; /* Forces button to take full width on new line */
   margin-top: 10px;
 }
+
+.text-box {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 15px;
+
+  border-radius: 10px;
+  border: 1px solid #2776ea;
+  outline: none;
+
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+
+  box-sizing: border-box;
+}
+
+.text-box:focus {
+  box-shadow: 0 0 6px rgba(39, 118, 234, 0.6);
+  border-color: #2776ea;
+}
