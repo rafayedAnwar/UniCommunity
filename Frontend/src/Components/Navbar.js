@@ -43,6 +43,9 @@ const Navbar = () => {
             <Link to="/reviews" className={`navbar-link ${isActive("/reviews")}`}>Reviews</Link>
           </li>
           <li className="navbar-item">
+            <Link to="/hof" className={`navbar-link ${isActive("/hof")}`}>Hall Of Fame</Link>
+          </li>
+          <li className="navbar-item">
             <Link to="/events" className={`navbar-link ${isActive("/events")}`}>Events</Link>
           </li>
           <li className="navbar-item">

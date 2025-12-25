@@ -21,30 +21,40 @@ const CreateDiscussion = ({courseSelected, currentUser}) => {
         e.target.style.height = "auto";
         e.target.style.height = e.target.scrollHeight + "px";
     };
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (!header_text || !main_text) {
-            toast.error("Please fill in all fields");
-            return;}
 
-        const Discussion = { course_code: courseSelected, posted_by: currentUser._id, header_text, main_text}
-        const postResponse = await fetch('http://localhost:1760/api/discussions/create', {
-            method: 'POST',
-            body: JSON.stringify(Discussion),
-            headers: {'Content-Type': 'application/json'}
-            })
-        if (postResponse.ok) {
-            toast.success("Discussion Posted!!")
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!header_text || !main_text) { toast.error("Please fill in all fields"); return;}
+        const Discussion = {course_code: courseSelected, posted_by: currentUser._id, header_text, main_text};
+        try {
+            const postResponse = await fetch("http://localhost:1760/api/discussions/create",
+                { method: "POST", body: JSON.stringify(Discussion), headers: { "Content-Type": "application/json" }, credentials: "include"}
+            );
+            if (!postResponse.ok) {
+                const errorData = await postResponse.json(); console.log("Error details:", errorData); toast.error("Failed to post discussion"); return;}
+
+            // ✅ Only update contribution if discussion was created
+            await handleContributionUpdate();
+
+            toast.success("Discussion Posted!!");
             setHeaderText("");
             setMainText("");
             setWriting(false);
-        } else {
-            toast.error("Failed to post discussion");
-            const errorData = await postResponse.json();
-            console.log("Error details:", errorData);
-            setWriting(false);
-        }    
-    }
+
+        } catch (err) { console.error(err); toast.error("Something went wrong"); }
+    };
+
+    const handleContributionUpdate = async () => {
+        try {const response = await fetch(`http://localhost:1760/api/hof/thread/${currentUser._id}`,
+                {
+                    method: "POST",
+                    credentials: "include"}
+            );
+            if (!response.ok) {
+                const err = await response.json(); console.error("Contribution update failed:", err);}
+        } catch (error) {console.error("Contribution update error:", error);}
+    };
+
 
     return (
         <div className="discussion-container">

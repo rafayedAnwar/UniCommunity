@@ -16,6 +16,7 @@ import PublicProfilePage from "./Pages/PublicProfilePage";
 import MessagePage from "./Pages/MessagePage";
 import MessagesOverviewPage from "./Pages/MessagesOverviewPage";
 import ReviewPage from "./Pages/ReviewPage";
+import HOF from "./Pages/HallOfFamePage";
 
 function AppContent() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function AppContent() {
         <Route path="/messages" element={<MessagesOverviewPage />} />
         <Route path="/messages/:userId" element={<MessagePage />} />
         <Route path="/reviews" element={<ReviewPage />}/>
+        <Route path="/hof" element={<HOF/>}/>
       </Routes>
     </div>
   );

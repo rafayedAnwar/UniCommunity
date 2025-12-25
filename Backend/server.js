@@ -37,6 +37,7 @@ const discussionRoutes = require("./Routes/discussion_routes");
 const courseRoutes = require("./Routes/course_routes");
 const messageRoutes = require("./Routes/message_routes");
 const messagesOverviewRoutes = require("./Routes/messages_overview_routes");
+const contributionRoutes = require("./Routes/hof_routes");
 
 
 
@@ -50,6 +51,7 @@ app.use("/api/discussions", discussionRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/messages", messagesOverviewRoutes);
+app.use("/api/hof", contributionRoutes);
 
 // Logger
 app.use((req, res, next) => {

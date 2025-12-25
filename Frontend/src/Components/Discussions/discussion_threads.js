@@ -1,5 +1,5 @@
 import './discussion_threads.css'
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 import { FaCommentAlt } from "react-icons/fa";
 
@@ -8,11 +8,32 @@ import { ToastContainer, toast } from "react-toastify";
 
 const DiscussionThreads = ({thread, currentUser}) => {
 
-    const [likes, setLikes] = useState(thread.likes.length);
-    const [dislikes, setDislikes] = useState(thread.dislikes.length);
+    const [likes, setLikes] = useState(thread.likes?.length || 0);
+    const [dislikes, setDislikes] = useState(thread.dislikes?.length || 0);
     const [newcomment, setNewComments] = useState([]);
     const [commenting, setCommenting] = useState(false);
+    const [profile, setProfile] = useState({ firstName: "", lastName: "", photo: null, })
+
+    const fetchProfile = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:1760/api/users/${thread.posted_by}`,
+        {credentials: "include",}
+      );
+      const data = await response.json();
+      setProfile({
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        photo: data.photo || "",
+      });
+    } catch (error) {console.error("Error fetching profile:", error);}
+    }
     
+    useEffect(() => {
+         fetchProfile()
+      }, [thread?.posted_by]);
+
+
     const handleLike = async () => {
         if (!currentUser) { toast.error("Log in first to Like"); return}
 
@@ -51,10 +72,15 @@ const DiscussionThreads = ({thread, currentUser}) => {
 
     return (
         <div className="thread-block">
-            <p className="created-by"><img src={`${currentUser.photo}=s96`} 
-                                           referrerPolicy='no-referrer' 
-                                           crossOrigin="anonymous"
-                                           className='user-photo'/>{currentUser.firstName} {currentUser.lastName}</p>
+            <p className="created-by"><img
+            src={profile.photo && profile.photo.trim() !== "" ? profile.photo : `https://ui-avatars.com/api/?name=${profile.firstName}`}
+            alt={profile.firstName}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              e.target.onerror = null; e.target.src = `https://ui-avatars.com/api/?name=${profile.firstName}`;
+            }}
+            style={{ width: 50,height: 50, borderRadius: "30%", marginRight: 5, marginBottom: 5, objectFit: "cover",}}/> 
+            {profile.firstName} {profile.lastName}</p>
             <p className="header">{thread.header_text}</p>
             <p className="main">{thread.main_text}</p>
             <div className='interactives'>

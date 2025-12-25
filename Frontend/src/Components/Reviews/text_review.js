@@ -2,51 +2,62 @@ import React, { useEffect, useState } from 'react';
 import './text_review.css';
 
 const TextReview = ({ written }) => {
-  const [author, setAuthor] = useState(null);
+
+  const [profile, setProfile] = useState({
+      firstName: "",
+      lastName: "",
+      photo: null,
+    })
+
+  const fetchProfile = async () => {
+
+    try {
+      const response = await fetch(
+        `http://localhost:1760/api/users/${written.userId}`,
+        {credentials: "include",}
+      );
+      const data = await response.json();
+      setProfile({
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        photo: data.photo || "",
+      });
+    } catch (error) {console.error("Error fetching profile:", error);}
+  }
 
   useEffect(() => {
-    if (!written?.userId) return;
-
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`http://localhost:1760/api/users/${written.userId}`, {
-          credentials: 'include',
-        });
-        if (!res.ok) {
-          console.error('Failed to fetch user', await res.text());
-          return;
-        }
-        const data = await res.json();
-        setAuthor(data);
-      } catch (err) {
-        console.error('Error fetching user:', err);
-      }
-    };
-
-    fetchUser();
+    if (written?.userId) { fetchProfile()}
   }, [written?.userId]);
 
-  const firstName = author?.firstName || 'User';
-  const lastName = author?.lastName || '';
-  const fullName = `${firstName} ${lastName}`.trim();
-  const content = written?.text || '';
-  const date = written?.createdAt
-    ? new Date(written.createdAt).toLocaleDateString()
-    : '';
 
-  const photoUrl = author?.photo
-    ? `${author.photo}=s64`
-    : 'https://via.placeholder.com/64'; // fallback avatar
+  const content = written?.text || '';
+  const date = written?.createdAt ? new Date(written.createdAt).toLocaleDateString() : '';
+
+const fullName = `${profile.firstName} ${profile.lastName}`.trim() || 'User';
 
   return (
     <div className="individual-review">
       <img
-        src={photoUrl}
-        alt={fullName}
-        className="review-user-photo"
-        referrerPolicy="no-referrer"
-        crossOrigin="anonymous"
-      />
+            src={
+              profile.photo && profile.photo.trim() !== ""
+                ? profile.photo
+                : `https://ui-avatars.com/api/?name=${profile.firstName}`
+            }
+            alt={profile.firstName}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://ui-avatars.com/api/?name=${profile.firstName}`;
+            }}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: "30%",
+              marginRight: 5,
+              marginBottom: 5,
+              objectFit: "cover",
+            }}
+          />
       <div className="review-content">
         <div className="review-text">{content}</div>
         <div className="review-meta">
