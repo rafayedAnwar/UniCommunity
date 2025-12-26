@@ -20,6 +20,8 @@ const ProfilePage = () => {
     code: "",
     name: "",
     type: "current",
+    cgpa: "",
+    credits: "3",
   });
 
   const [userId, setUserId] = useState(null);
@@ -103,8 +105,8 @@ const ProfilePage = () => {
         linkedIn: data.socialLinks?.linkedIn || "",
         github: data.socialLinks?.github || "",
         portfolio: data.socialLinks?.portfolio || "",
-        currentCourses: data.currentCourses || [],
-        completedCourses: data.completedCourses || [],
+          currentCourses: data.currentCourses || [],
+          completedCourses: data.completedCourses || [],
       });
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -154,7 +156,35 @@ const ProfilePage = () => {
 
   const handleAddCourse = () => {
     if (newCourse.code && newCourse.name) {
-      const courseToAdd = { code: newCourse.code, name: newCourse.name };
+      if (newCourse.type === "completed") {
+        const gp = parseFloat(newCourse.cgpa);
+        if (Number.isNaN(gp) || gp < 0 || gp > 4) {
+          alert("Please enter a CGPA between 0 and 4 for completed courses.");
+          return;
+        }
+        const credits = parseFloat(newCourse.credits || "3");
+        if (!newCourse.credits || Number.isNaN(credits) || credits <= 0) {
+          alert("Please enter valid credits for completed courses.");
+          return;
+        }
+      }
+
+      const courseToAdd = {
+        code: newCourse.code.trim().toUpperCase(),
+        name: newCourse.name.trim(),
+        cgpa:
+          newCourse.type === "completed"
+            ? parseFloat(newCourse.cgpa)
+            : newCourse.cgpa
+              ? parseFloat(newCourse.cgpa)
+              : undefined,
+        credits:
+          newCourse.type === "completed"
+            ? parseFloat(newCourse.credits || "3")
+            : newCourse.credits
+              ? parseFloat(newCourse.credits)
+              : 3,
+      };
 
       if (newCourse.type === "current") {
         setProfile((prev) => ({
@@ -168,7 +198,7 @@ const ProfilePage = () => {
         }));
       }
 
-      setNewCourse({ code: "", name: "", type: "current" });
+      setNewCourse({ code: "", name: "", type: "current", cgpa: "", credits: "3" });
     }
   };
 
@@ -192,17 +222,33 @@ const ProfilePage = () => {
         ? profile.currentCourses[index]
         : profile.completedCourses[index];
 
+    let updatedCourse = { ...course };
+    if (to === "completed") {
+      const entered = prompt(
+        "Enter CGPA (0-4) for this course before marking as completed:"
+      );
+      const gp = entered !== null ? parseFloat(entered) : NaN;
+      if (Number.isNaN(gp) || gp < 0 || gp > 4) {
+        alert("Invalid CGPA. Please try again.");
+        return;
+      }
+      updatedCourse.cgpa = gp;
+      // Use existing credits or default to 3 when moving to completed
+      const credits = course.credits ? parseFloat(course.credits) : 3;
+      updatedCourse.credits = Number.isFinite(credits) && credits > 0 ? credits : 3;
+    }
+
     handleRemoveCourse(index, from);
 
     if (to === "current") {
       setProfile((prev) => ({
         ...prev,
-        currentCourses: [...prev.currentCourses, course],
+        currentCourses: [...prev.currentCourses, updatedCourse],
       }));
     } else {
       setProfile((prev) => ({
         ...prev,
-        completedCourses: [...prev.completedCourses, course],
+        completedCourses: [...prev.completedCourses, updatedCourse],
       }));
     }
   };
@@ -425,6 +471,29 @@ const ProfilePage = () => {
                   <option value="current">Current</option>
                   <option value="completed">Completed</option>
                 </select>
+                <input
+                  type="number"
+                  placeholder="Credits (e.g., 3)"
+                  value={newCourse.credits}
+                  onChange={(e) =>
+                    setNewCourse({ ...newCourse, credits: e.target.value })
+                  }
+                  min="0"
+                  step="0.5"
+                />
+                {newCourse.type === "completed" && (
+                  <input
+                    type="number"
+                    placeholder="CGPA (0-4)"
+                    value={newCourse.cgpa}
+                    onChange={(e) =>
+                      setNewCourse({ ...newCourse, cgpa: e.target.value })
+                    }
+                    min="0"
+                    max="4"
+                    step="0.01"
+                  />
+                )}
                 <button className="add-course-btn" onClick={handleAddCourse}>
                   Add
                 </button>
@@ -455,13 +524,13 @@ const ProfilePage = () => {
                             }
                             title="Move to completed"
                           >
-                            ✓
+                            ->
                           </button>
                           <button
                             className="remove-btn"
                             onClick={() => handleRemoveCourse(index, "current")}
                           >
-                            ×
+                            x
                           </button>
                         </div>
                       )}
@@ -482,7 +551,15 @@ const ProfilePage = () => {
                     <li key={index} className="course-item completed">
                       <div className="course-info">
                         <span className="course-code">{course.code}</span>
-                        <span className="course-name">{course.name}</span>
+                        <span className="course-name">
+                          {course.name}
+                          {course.cgpa !== undefined && course.cgpa !== null && (
+                            <span className="course-meta">
+                              {" | CGPA: "}{course.cgpa}
+                              {` | Credits: ${course.credits ?? 3}`}
+                            </span>
+                          )}
+                        </span>
                       </div>
                       {isEditing && (
                         <div className="course-actions">
@@ -493,7 +570,7 @@ const ProfilePage = () => {
                             }
                             title="Move to current"
                           >
-                            ↩
+                            {"<-"}
                           </button>
                           <button
                             className="remove-btn"
@@ -501,7 +578,7 @@ const ProfilePage = () => {
                               handleRemoveCourse(index, "completed")
                             }
                           >
-                            ×
+                            x
                           </button>
                         </div>
                       )}
@@ -518,3 +595,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+

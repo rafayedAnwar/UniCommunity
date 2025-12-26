@@ -11,6 +11,7 @@ const eventSchema = new Schema(
     location: { type: String, required: true },
     organizerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     organizerName: { type: String, required: true },
+    openForAll: { type: Boolean, default: true },
     maxAttendees: { type: Number, required: false },
     rsvps: [
       {

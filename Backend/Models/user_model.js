@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
   {
     googleId: { type: String, required: true, unique: true },
+    googleRefreshToken: { type: String, required: false },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -18,12 +19,16 @@ const userSchema = new Schema(
       {
         code: { type: String, required: true },
         name: { type: String, required: true },
+        cgpa: { type: Number, required: false, min: 0, max: 4 },
+        credits: { type: Number, required: false, min: 0 },
       },
     ],
     completedCourses: [
       {
         code: { type: String, required: true },
         name: { type: String, required: true },
+        cgpa: { type: Number, required: false, min: 0, max: 4 },
+        credits: { type: Number, required: false, min: 0 },
       },
     ],
     badges: [

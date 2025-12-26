@@ -1,12 +1,14 @@
 const User = require("../Models/user_model");
+const Course = require("../Models/course_model");
+const { checkProfileBadges } = require("./badge_utils");
 
 // Get current logged-in user
 const getCurrentUser = (req, res) => {
-    if (req.isAuthenticated()) {
-        res.json({ user: req.user }); // Passport sets req.user
-    } else {
-        res.status(401).json({ error: "Not authenticated" });
-    }
+  if (req.isAuthenticated()) {
+    res.json({ user: req.user }); // Passport sets req.user
+  } else {
+    res.status(401).json({ error: "Not authenticated" });
+  }
 };
 
 // GET Request to get user profile by ID
@@ -25,12 +27,55 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-const { checkProfileBadges } = require("./badge_utils");
+// Add any courses from the user's completed list into the global course catalog
+async function syncCompletedCourses(completedCourses = []) {
+  if (!Array.isArray(completedCourses) || completedCourses.length === 0) return;
+
+  for (const course of completedCourses) {
+    const code = course?.code?.trim()?.toUpperCase();
+    const name = course?.name?.trim();
+    if (!code || !name) continue;
+
+    await Course.findOneAndUpdate(
+      { course_code: code },
+      {
+        $setOnInsert: {
+          course_code: code,
+          course_name: name,
+          course_description: "Added from user profile completed courses",
+          course_prerequisites: [],
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
+}
+
 // PUT Request to update user profile
 const updateUserProfile = async (req, res) => {
   try {
     const { userId } = req.params;
     const { bio, socialLinks, currentCourses, completedCourses } = req.body;
+
+    if (Array.isArray(completedCourses)) {
+      const invalid = completedCourses.find(
+        (c) =>
+          c &&
+          (!Number.isFinite(Number(c.cgpa)) ||
+            Number(c.cgpa) < 0 ||
+            Number(c.cgpa) > 4 ||
+            !Number.isFinite(Number(c.credits)) ||
+            Number(c.credits) <= 0)
+      );
+      if (invalid) {
+        return res
+          .status(400)
+          .json({
+            error:
+              "Completed courses must include valid cgpa (0-4) and credits (>0).",
+          });
+      }
+    }
 
     const user = await User.findById(userId);
 
@@ -45,6 +90,8 @@ const updateUserProfile = async (req, res) => {
     if (completedCourses) user.completedCourses = completedCourses;
 
     await user.save();
+    // Sync completed courses to the global course catalog so they become selectable elsewhere
+    await syncCompletedCourses(user.completedCourses);
     // Check for profile completion badge
     await checkProfileBadges(user._id);
 
@@ -81,7 +128,6 @@ const getUserBadges = async (req, res) => {
   }
 };
 
-
 // GET Request to search users by name
 const searchUsersByName = async (req, res) => {
   try {
@@ -96,8 +142,16 @@ const searchUsersByName = async (req, res) => {
         { firstName: regex },
         { lastName: regex },
         { email: regex },
-        { $expr: { $regexMatch: { input: { $concat: ["$firstName", " ", "$lastName"] }, regex: q, options: "i" } } }
-      ]
+        {
+          $expr: {
+            $regexMatch: {
+              input: { $concat: ["$firstName", " ", "$lastName"] },
+              regex: q,
+              options: "i",
+            },
+          },
+        },
+      ],
     }).select("firstName lastName email photo bio");
     res.status(200).json(users);
   } catch (error) {

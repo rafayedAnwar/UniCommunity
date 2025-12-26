@@ -17,6 +17,8 @@ import MessagePage from "./Pages/MessagePage";
 import MessagesOverviewPage from "./Pages/MessagesOverviewPage";
 import ReviewPage from "./Pages/ReviewPage";
 import HOF from "./Pages/HallOfFamePage";
+import CgpaPage from "./Pages/CgpaPage";
+import EventsPage from "./Pages/EventsPage";
 
 function AppContent() {
   const location = useLocation();
@@ -38,6 +40,8 @@ function AppContent() {
         <Route path="/messages/:userId" element={<MessagePage />} />
         <Route path="/reviews" element={<ReviewPage />}/>
         <Route path="/hof" element={<HOF/>}/>
+        <Route path="/cgpa" element={<CgpaPage />}/>
+        <Route path="/events" element={<EventsPage />}/>
       </Routes>
     </div>
   );

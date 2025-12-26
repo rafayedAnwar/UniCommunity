@@ -21,12 +21,12 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
   new GoogleStrategy(
     {
+      passReqToCallback: true,
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:1760/api/auth/google/callback",
-      scope: ["profile", "email"],
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       // check if user already exists in our db
       const userEmail = profile.emails[0].value;
 
@@ -55,9 +55,13 @@ passport.use(
         // Update photo if available from Google
         if (photoUrl) {
           currentUser.photo = photoUrl;
-          await currentUser.save();
-          console.log("Updated user photo:", photoUrl);
         }
+        // Store refresh token if we received a new one (prompt consent may be required)
+        if (refreshToken) {
+          currentUser.googleRefreshToken = refreshToken;
+        }
+        await currentUser.save();
+        console.log("Updated user photo:", photoUrl);
         // Award signup badge if not already earned
         await checkSignupBadge(currentUser._id);
         return done(null, currentUser);
@@ -69,6 +73,7 @@ passport.use(
           lastName: profile.name.familyName,
           email: profile.emails[0].value,
           photo: photoUrl || "",
+          googleRefreshToken: refreshToken,
         }).save();
         console.log("Created new user with photo:", photoUrl);
         // Award signup badge

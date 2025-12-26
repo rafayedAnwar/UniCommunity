@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const courseEntrySchema = new Schema({
   courseCode: { type: String, required: true },
   courseName: { type: String, required: true },
-  credits: { type: Number, required: true, min: 0 },
+  credits: { type: Number, required: true, min: 0, default: 3 },
   gradePoint: { type: Number, required: true, min: 0, max: 4 },
-  letterGrade: { type: String, required: true },
+  letterGrade: { type: String, required: true, default: "N/A" },
   semester: { type: String, required: false },
 });
 
@@ -37,13 +37,15 @@ cgpaCalculatorSchema.methods.calculateCGPA = function () {
   let totalCredits = 0;
 
   this.courses.forEach((course) => {
-    totalPoints += course.gradePoint * course.credits;
-    totalCredits += course.credits;
+    const credits = Number(course.credits) || 0;
+    const gp = Number(course.gradePoint) || 0;
+    totalPoints += gp * credits;
+    totalCredits += credits;
   });
 
   this.totalCredits = totalCredits;
   this.currentCGPA =
-    totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 0;
+    totalCredits > 0 ? Number((totalPoints / totalCredits).toFixed(2)) : 0;
 };
 
 module.exports = mongoose.model("CGPACalculator", cgpaCalculatorSchema);
