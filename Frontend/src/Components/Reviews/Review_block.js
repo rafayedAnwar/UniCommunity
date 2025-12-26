@@ -68,16 +68,31 @@ const ReviewBlock = ({review, currentUser}) => {
 
         const data = await res.json();
 
-        if (!res.ok) {
-          toast.error(data.error || 'Failed to submit review');
-          throw new Error(data.error || 'Failed to submit review');}
+        if (!res.ok) { toast.error(data.error || 'Failed to submit review'); throw new Error(data.error || 'Failed to submit review');}
         
           //success:
           toast.success("Review posted successfully!");
+
+          await handleContributionUpdate();
           
         // reset UI
         setReviewing(false); setTextReview(''); setRatings({ theory: 0, lab: 0, assignment: 0, project: 0, resources: 0, });
       } catch (err) { console.error(err.message);}
+    };
+
+    const handleContributionUpdate = async () => {
+      if (!currentUser?._id) return;
+      try {
+        const response = await fetch(
+          `http://localhost:1760/api/hof/review/${currentUser._id}`,
+          { method: "PUT", credentials: "include" }
+        );
+        if (!response.ok) {
+          console.error("Contribution update failed:", response.status);
+        }
+      } catch (error) {
+        console.error("Contribution update error:", error);
+      }
     };
 
     //main return
@@ -118,17 +133,7 @@ const ReviewBlock = ({review, currentUser}) => {
                 )}
               </div>
             )}
-            <ToastContainer
-              position="top-right"
-              autoClose={3000} // closes after 3 seconds
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />  
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover/>  
         </div>
       )
 }
