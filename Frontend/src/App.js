@@ -19,6 +19,8 @@ import ReviewPage from "./Pages/ReviewPage";
 import HOF from "./Pages/HallOfFamePage";
 import CgpaPage from "./Pages/CgpaPage";
 import EventsPage from "./Pages/EventsPage";
+import InstructorReviewsPage from "./Pages/InstructorReviewsPage";
+import ProjectPartnersPage from "./Pages/ProjectPartnersPage";
 
 function AppContent() {
   const location = useLocation();
@@ -42,6 +44,8 @@ function AppContent() {
         <Route path="/hof" element={<HOF/>}/>
         <Route path="/cgpa" element={<CgpaPage />}/>
         <Route path="/events" element={<EventsPage />}/>
+        <Route path="/instructors" element={<InstructorReviewsPage />}/>
+        <Route path="/partners" element={<ProjectPartnersPage />}/>
       </Routes>
     </div>
   );

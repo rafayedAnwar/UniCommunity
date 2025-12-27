@@ -1,0 +1,162 @@
+.partners-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  color: #0f172a;
+}
+
+.partners-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.partners-header h1 {
+  margin: 0 0 6px 0;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 540px;
+}
+
+.filters input {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  font: inherit;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.partners-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-row.two-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.partners-card input,
+.partners-card textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  font: inherit;
+}
+
+.partners-card textarea {
+  resize: vertical;
+}
+
+.partners-card .primary,
+.partners-card .secondary,
+.partners-card .danger {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.partners-card .primary {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #fff;
+}
+
+.partners-card .secondary {
+  background: #eef2f7;
+  color: #1f2d3d;
+}
+
+.partners-card .danger {
+  background: #f25f5c;
+  color: #fff;
+}
+
+.listing {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.listing-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.skills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.skills .pill {
+  background: #0ea5e9;
+}
+
+.members {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #475569;
+}
+
+.trello-link {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.partners-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .partners-grid {
+    grid-template-columns: 1fr;
+  }
+}
