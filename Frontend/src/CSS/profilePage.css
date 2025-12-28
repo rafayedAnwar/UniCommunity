@@ -348,7 +348,8 @@
 
 .course-name {
   color: #4a5568;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
 }
 
 .course-actions {

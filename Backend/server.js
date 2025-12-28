@@ -38,6 +38,8 @@ const courseRoutes = require("./Routes/course_routes");
 const messageRoutes = require("./Routes/message_routes");
 const messagesOverviewRoutes = require("./Routes/messages_overview_routes");
 const contributionRoutes = require("./Routes/hof_routes");
+const instructorReviewRoutes = require("./Routes/instructor_review_routes");
+const projectListingRoutes = require("./Routes/project_listing_routes");
 
 
 
@@ -52,6 +54,8 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/messages", messagesOverviewRoutes);
 app.use("/api/hof", contributionRoutes);
+app.use("/api/instructor-reviews", instructorReviewRoutes);
+app.use("/api/partners", projectListingRoutes);
 
 // Logger
 app.use((req, res, next) => {

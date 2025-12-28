@@ -52,6 +52,7 @@ const createEvent = async (req, res) => {
     organizerName,
     maxAttendees,
     tags,
+    openForAll,
   } = req.body;
 
   try {
@@ -64,6 +65,7 @@ const createEvent = async (req, res) => {
       location,
       organizerId,
       organizerName,
+      openForAll: openForAll !== undefined ? openForAll : true,
       maxAttendees,
       tags,
     });
@@ -90,9 +92,17 @@ const updateEvent = async (req, res) => {
         .json({ error: "Only the organizer can update this event" });
     }
 
-    const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const updatedEvent = await Event.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        openForAll:
+          req.body.openForAll !== undefined ? req.body.openForAll : event.openForAll,
+      },
+      {
+        new: true,
+      }
+    );
     res.status(200).json(updatedEvent);
   } catch (error) {
     res.status(400).json({ error: error.message });
