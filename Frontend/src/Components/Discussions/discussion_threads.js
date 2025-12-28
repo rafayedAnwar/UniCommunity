@@ -5,6 +5,7 @@ import { FaCommentAlt } from "react-icons/fa";
 
 import { ToastContainer, toast } from "react-toastify";
 
+import TextReview from "../Reviews/text_review.js"
 
 const DiscussionThreads = ({thread, currentUser}) => {
 
@@ -88,17 +89,15 @@ const DiscussionThreads = ({thread, currentUser}) => {
                 <p className="dislikes"><FaArrowTrendDown className='downtrend-icon' title='notStonks' onClick={handleDislike}/>  {dislikes}</p>
                 <p className="comments"><FaCommentAlt className='comment-icon' title='Comments' onClick={() => setCommenting(prev => !prev)}/>{thread.comments}</p>
                 {commenting && (
-                    <div className="all-thread-comments">
-                        <div>Add Comment</div>
-                        {thread.comments.length === 0 ? (
-                        <p className="no-comments">No comments yet</p>):
-
-                        (thread.comments.map((comment_item) => (
-                            <div className="individual-comment" key={comment_item._id}>
-                                {comment_item.text}
-                            </div>))
-                        )}
-                    </div>
+                  <div className="comments-container">
+                    {thread.comments && thread.comments.length > 0 ? (
+                      thread.comments.map((comment_item) => (
+                        <TextReview key={comment_item._id} written={comment_item}/>
+                      ))
+                    ) : (
+                      <p className="no-reviews">No Comments yet.</p>
+                    )}
+                  </div>
                 )}
             </div>
         </div>

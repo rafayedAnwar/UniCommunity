@@ -48,6 +48,12 @@
     justify-content: center;
     gap: 5px;
     cursor: pointer;
+    border: none;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 .view-review{
     background: #4d4dff;
@@ -59,6 +65,39 @@
     justify-content: center;
     gap: 5px;
     cursor: pointer;
+    border: none;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.add-review:hover,
+.view-review:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(39, 118, 234, 0.35);
+}
+
+.add-review:focus-visible,
+.view-review:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(39, 118, 234, 0.45);
+}
+
+.add-review.is-active,
+.view-review.is-active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 18px rgba(39, 118, 234, 0.4);
+  filter: brightness(0.95);
+}
+
+.add-review.is-active {
+  background: #8c3ee3;
+}
+
+.view-review.is-active {
+  background: #3a3ae2;
 }
 
 .down, .plus {

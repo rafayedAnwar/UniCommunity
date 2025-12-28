@@ -102,8 +102,22 @@ const ReviewBlock = ({review, currentUser}) => {
                 <div className='course-info'>
                     <div className='course-code' title='Course Code'>{review.courseId}</div>
                     <div className='title' title='Course Title'>{review.courseTitle}</div>
-                    <div className='add-review' onClick={() => {setReviewing(prev => !prev); setComment(false);}}>Add Your Review <IoIosAddCircle className='plus'/></div>
-                    <div className='view-review' onClick={() => {setComment(prev => !prev); setReviewing(false)}} >See Individual Reviews <IoChevronDownCircle className='down' /></div>
+                    <button
+                      type="button"
+                      className={`add-review ${reviewing ? 'is-active' : ''}`}
+                      onClick={() => {setReviewing(prev => !prev); setComment(false);}}
+                      aria-pressed={reviewing}
+                    >
+                      Add Your Review <IoIosAddCircle className='plus'/>
+                    </button>
+                    <button
+                      type="button"
+                      className={`view-review ${comment ? 'is-active' : ''}`}
+                      onClick={() => {setComment(prev => !prev); setReviewing(false)}}
+                      aria-pressed={comment}
+                    >
+                      See Individual Reviews <IoChevronDownCircle className='down' />
+                    </button>
                 </div>
                 <Radar data={data} options={options} className='radar'/>
             </div>
