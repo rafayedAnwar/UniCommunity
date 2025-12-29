@@ -17,12 +17,10 @@ const DiscussionPage = () => {
 
     useEffect(() => {
         fetch("http://localhost:1760/api/users/current", {
-            credentials: "include", // important for session-based auth
+            credentials: "include", 
         })
         .then(res => res.json())
-        .then(data => {
-            if (data.user) setCurrentUser(data.user);
-        })
+        .then(data => {if (data.user) setCurrentUser(data.user); })
         .catch(err => console.error(err));
     }, []);
 

@@ -87,12 +87,8 @@ const ReviewBlock = ({review, currentUser}) => {
           `http://localhost:1760/api/hof/review/${currentUser._id}`,
           { method: "PUT", credentials: "include" }
         );
-        if (!response.ok) {
-          console.error("Contribution update failed:", response.status);
-        }
-      } catch (error) {
-        console.error("Contribution update error:", error);
-      }
+        if (!response.ok) {console.error("Contribution update failed:", response.status);}
+      } catch (error) {console.error("Contribution update error:", error);}
     };
 
     //main return
@@ -105,8 +101,7 @@ const ReviewBlock = ({review, currentUser}) => {
                     <button
                       type="button"
                       className={`add-review ${reviewing ? 'is-active' : ''}`}
-                      onClick={() => {setReviewing(prev => !prev); setComment(false);}}
-                      aria-pressed={reviewing}
+                      onClick={() => {setReviewing(prev => !prev); setComment(false);}} aria-pressed={reviewing}
                     >
                       Add Your Review <IoIosAddCircle className='plus'/>
                     </button>
