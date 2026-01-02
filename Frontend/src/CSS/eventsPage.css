@@ -86,6 +86,7 @@
   border: none;
   border-radius: 10px;
   padding: 11px 24px;
+  font-family: "Space Grotesk", sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -405,6 +406,7 @@ input[type="checkbox"] {
   border-radius: 8px;
   padding: 7px 14px;
   color: white;
+  font-family: "Space Grotesk", sans-serif;
   font-weight: 600;
   font-size: 12px;
   cursor: pointer;
