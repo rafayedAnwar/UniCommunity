@@ -1,9 +1,9 @@
 .partners-container {
   max-width: 1200px;
-  margin: 80px auto 40px;
+  margin: 20px auto 40px;
   padding: 32px 24px;
   color: #0f172a;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: inherit;
 }
 
 .partners-header {
@@ -192,6 +192,9 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: 750px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 .events-list::-webkit-scrollbar {

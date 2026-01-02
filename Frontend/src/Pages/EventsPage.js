@@ -436,7 +436,7 @@ const EventsPage = () => {
                 const myStatus = myRsvpStatus[ev._id];
                 const isOwner = ev.organizerId?.toString?.() === user?._id;
                 return (
-                  <div className="event-card" key={ev._id}>
+                  <div className="event-item" key={ev._id}>
                     {editingId === ev._id ? (
                       <form className="event-form" onSubmit={handleUpdate}>
                         <div className="form-row">
@@ -583,6 +583,9 @@ const EventsPage = () => {
                       <>
                         <div className="event-top">
                           <div>
+                            <h3 className="event-name">{ev.title}</h3>
+                          </div>
+                          <div className="event-pills">
                             <span className={`pill ${ev.eventType}`}>
                               {ev.eventType}
                             </span>
@@ -593,27 +596,26 @@ const EventsPage = () => {
                             >
                               {ev.openForAll ? "Open for all" : "Restricted"}
                             </span>
-                            <h3>{ev.title}</h3>
-                            <p className="muted">{ev.description}</p>
                           </div>
-                          <div className="event-time">
-                            <div>
-                              <strong>Starts:</strong>{" "}
-                              {new Date(ev.startDateTime).toLocaleString()}
-                            </div>
-                            <div>
-                              <strong>Ends:</strong>{" "}
-                              {new Date(ev.endDateTime).toLocaleString()}
-                            </div>
-                            <div>
-                              <strong>Location:</strong> {ev.location}
-                            </div>
-                            {ev.maxAttendees && (
-                              <div>
-                                <strong>Max:</strong> {ev.maxAttendees}
-                              </div>
-                            )}
+                        </div>
+                        <p className="muted">{ev.description}</p>
+                        <div className="event-time">
+                          <div>
+                            <strong>Starts:</strong>{" "}
+                            {new Date(ev.startDateTime).toLocaleString()}
                           </div>
+                          <div>
+                            <strong>Ends:</strong>{" "}
+                            {new Date(ev.endDateTime).toLocaleString()}
+                          </div>
+                          <div>
+                            <strong>Location:</strong> {ev.location}
+                          </div>
+                          {ev.maxAttendees && (
+                            <div>
+                              <strong>Max:</strong> {ev.maxAttendees}
+                            </div>
+                          )}
                         </div>
                         <div className="event-bottom">
                           <div className="rsvp-stats">
