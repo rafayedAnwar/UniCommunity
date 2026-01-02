@@ -6,8 +6,16 @@ const getEvents = async (req, res) => {
     const { eventType, startDate, endDate } = req.query;
     let query = {};
 
-    if (eventType) {
-      query.eventType = eventType;
+    if (eventType && eventType !== "all") {
+      // Handle openForAll filtering
+      if (eventType === "open") {
+        query.openForAll = true;
+      } else if (eventType === "restricted") {
+        query.openForAll = false;
+      } else {
+        // Handle academic/social filtering
+        query.eventType = eventType;
+      }
     }
 
     if (startDate || endDate) {
@@ -97,7 +105,9 @@ const updateEvent = async (req, res) => {
       {
         ...req.body,
         openForAll:
-          req.body.openForAll !== undefined ? req.body.openForAll : event.openForAll,
+          req.body.openForAll !== undefined
+            ? req.body.openForAll
+            : event.openForAll,
       },
       {
         new: true,
