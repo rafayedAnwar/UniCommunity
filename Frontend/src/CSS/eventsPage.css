@@ -24,6 +24,7 @@
   font-size: 2rem;
   font-weight: 700;
   color: #1e293b;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .events-header p {
@@ -206,6 +207,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #1e293b;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .event-form {
@@ -317,6 +319,7 @@ input[type="checkbox"] {
   font-size: 1.05rem;
   color: #1e293b;
   margin: 0;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .event-pills {
@@ -332,6 +335,7 @@ input[type="checkbox"] {
   font-weight: 600;
   text-transform: capitalize;
   color: #fff;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .pill.academic {
@@ -362,6 +366,7 @@ input[type="checkbox"] {
   font-size: 12px;
   color: #64748b;
   font-weight: 500;
+  font-family: "Inter", sans-serif;
 }
 
 .event-bottom {
@@ -381,6 +386,7 @@ input[type="checkbox"] {
   color: #64748b;
   font-size: 12px;
   font-weight: 500;
+  font-family: "Inter", sans-serif;
 }
 
 .rsvp-stats span {
