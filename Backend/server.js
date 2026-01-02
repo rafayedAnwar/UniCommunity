@@ -12,7 +12,8 @@ const PORT = process.env.PORT;
 const MONGO_URI = process.env.SERVER_URI;
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // --- SESSION & PASSPORT---
 app.use(
@@ -40,8 +41,6 @@ const messagesOverviewRoutes = require("./Routes/messages_overview_routes");
 const contributionRoutes = require("./Routes/hof_routes");
 const instructorReviewRoutes = require("./Routes/instructor_review_routes");
 const projectListingRoutes = require("./Routes/project_listing_routes");
-
-
 
 app.use("/api/events", eventRoutes);
 app.use("/api/cgpa", cgpaRoutes);

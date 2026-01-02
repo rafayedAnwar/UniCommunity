@@ -7,6 +7,8 @@ const ForumPage = () => {
   const [resources, setResources] = useState([]);
   const [showCreateForum, setShowCreateForum] = useState(false);
   const [showUploadResource, setShowUploadResource] = useState(false);
+  const [uploadMethod, setUploadMethod] = useState("url"); // "url" or "file"
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [newForum, setNewForum] = useState({
     courseCode: "",
@@ -137,8 +139,71 @@ const ForumPage = () => {
     }
   };
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        alert("File size exceeds 10MB limit");
+        return;
+      }
+      setSelectedFile(file);
+      // Auto-detect file type
+      setNewResource({ ...newResource, fileType: file.type });
+    }
+  };
+
   const handleUploadResource = async (e) => {
     e.preventDefault();
+
+    // Validation
+    if (uploadMethod === "file" && !selectedFile) {
+      alert("Please select a file to upload");
+      return;
+    }
+
+    if (uploadMethod === "url" && !newResource.fileUrl) {
+      alert("Please enter a file URL");
+      return;
+    }
+
+    try {
+      let payload = {
+        title: newResource.title,
+        description: newResource.description,
+        userId,
+        uploaderName: userName,
+      };
+
+      // If uploading a file directly
+      if (uploadMethod === "file" && selectedFile) {
+        // Convert file to base64
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          payload.fileData = reader.result;
+          payload.fileName = selectedFile.name;
+          payload.fileSize = selectedFile.size;
+          payload.fileType = selectedFile.type;
+
+          await sendUploadRequest(payload);
+        };
+        reader.onerror = () => {
+          alert("Failed to read file");
+        };
+        reader.readAsDataURL(selectedFile);
+      } else if (uploadMethod === "url") {
+        // Using URL
+        payload.fileUrl = newResource.fileUrl;
+        payload.fileType = newResource.fileType;
+        await sendUploadRequest(payload);
+      }
+    } catch (error) {
+      console.error("Error uploading resource:", error);
+      alert("Failed to upload resource");
+    }
+  };
+
+  const sendUploadRequest = async (payload) => {
     try {
       const response = await fetch(
         `http://localhost:1760/api/forums/${selectedForum.courseCode}/resources`,
@@ -147,17 +212,16 @@ const ForumPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...newResource,
-            userId,
-            uploaderName: userName,
-          }),
+          credentials: "include",
+          body: JSON.stringify(payload),
         }
       );
 
       if (response.ok) {
         alert("Resource uploaded successfully!");
         setShowUploadResource(false);
+        setUploadMethod("url");
+        setSelectedFile(null);
         setNewResource({
           title: "",
           description: "",
@@ -171,11 +235,11 @@ const ForumPage = () => {
       }
     } catch (error) {
       console.error("Error uploading resource:", error);
-      alert("Failed to upload resource");
+      alert("Failed to upload resource: " + error.message);
     }
   };
 
-  const handleDownload = async (resourceId, fileUrl) => {
+  const handleDownload = async (resourceId, resource) => {
     try {
       await fetch(
         `http://localhost:1760/api/forums/${selectedForum.courseCode}/resources/${resourceId}/download`,
@@ -184,7 +248,18 @@ const ForumPage = () => {
         }
       );
 
-      window.open(fileUrl, "_blank");
+      // If file has fileData (stored in DB), download it
+      if (resource.fileData) {
+        const link = document.createElement("a");
+        link.href = resource.fileData;
+        link.download = resource.fileName || "download";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else if (resource.fileUrl) {
+        // Otherwise, open the URL
+        window.open(resource.fileUrl, "_blank");
+      }
     } catch (error) {
       console.error("Error downloading resource:", error);
     }
@@ -343,6 +418,20 @@ const ForumPage = () => {
                           {resource.description}
                         </p>
 
+                        {resource.fileName && (
+                          <div
+                            style={{
+                              fontSize: "13px",
+                              color: "#64748b",
+                              marginTop: "4px",
+                            }}
+                          >
+                            📁 {resource.fileName}{" "}
+                            {resource.fileSize &&
+                              `(${(resource.fileSize / 1024).toFixed(2)} KB)`}
+                          </div>
+                        )}
+
                         <div className="resource-footer">
                           <div className="uploader-info">
                             <span>Uploaded by {resource.uploaderName}</span>
@@ -354,7 +443,7 @@ const ForumPage = () => {
                             <button
                               className="btn btn-small btn-primary"
                               onClick={() =>
-                                handleDownload(resource._id, resource.fileUrl)
+                                handleDownload(resource._id, resource)
                               }
                             >
                               Download
@@ -457,6 +546,46 @@ const ForumPage = () => {
             <h2>Upload Resource</h2>
             <form onSubmit={handleUploadResource}>
               <div className="form-group">
+                <label>Upload Method *</label>
+                <div
+                  style={{ display: "flex", gap: "16px", marginBottom: "12px" }}
+                >
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      value="url"
+                      checked={uploadMethod === "url"}
+                      onChange={(e) => setUploadMethod(e.target.value)}
+                    />
+                    URL Link
+                  </label>
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      value="file"
+                      checked={uploadMethod === "file"}
+                      onChange={(e) => setUploadMethod(e.target.value)}
+                    />
+                    Upload File (PDF, etc.)
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-group">
                 <label>Title *</label>
                 <input
                   type="text"
@@ -483,50 +612,89 @@ const ForumPage = () => {
                   rows="3"
                 />
               </div>
-              <div className="form-group">
-                <label>File URL *</label>
-                <input
-                  type="url"
-                  value={newResource.fileUrl}
-                  onChange={(e) =>
-                    setNewResource({ ...newResource, fileUrl: e.target.value })
-                  }
-                  required
-                  placeholder="https://drive.google.com/..."
-                />
-              </div>
 
-              <div className="form-group">
-                <label>File Type *</label>
-                <select
-                  value={newResource.fileType}
-                  onChange={(e) =>
-                    setNewResource({ ...newResource, fileType: e.target.value })
-                  }
-                  required
-                >
-                  <option value="">Select file type</option>
-                  <option value="application/pdf">PDF Document</option>
-                  <option value="application/msword">Word Document</option>
-                  <option value="application/vnd.ms-powerpoint">
-                    PowerPoint Presentation
-                  </option>
-                  <option value="image/jpeg">JPEG Image</option>
-                  <option value="image/png">PNG Image</option>
-                  <option value="text/plain">Text File</option>
-                  <option value="application/zip">ZIP Archive</option>
-                </select>
-              </div>
+              {uploadMethod === "url" ? (
+                <>
+                  <div className="form-group">
+                    <label>File URL *</label>
+                    <input
+                      type="url"
+                      value={newResource.fileUrl}
+                      onChange={(e) =>
+                        setNewResource({
+                          ...newResource,
+                          fileUrl: e.target.value,
+                        })
+                      }
+                      required
+                      placeholder="https://drive.google.com/..."
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>File Type *</label>
+                    <select
+                      value={newResource.fileType}
+                      onChange={(e) =>
+                        setNewResource({
+                          ...newResource,
+                          fileType: e.target.value,
+                        })
+                      }
+                      required
+                    >
+                      <option value="">Select file type</option>
+                      <option value="application/pdf">PDF Document</option>
+                      <option value="application/msword">Word Document</option>
+                      <option value="application/vnd.ms-powerpoint">
+                        PowerPoint Presentation
+                      </option>
+                      <option value="image/jpeg">JPEG Image</option>
+                      <option value="image/png">PNG Image</option>
+                      <option value="text/plain">Text File</option>
+                      <option value="application/zip">ZIP Archive</option>
+                    </select>
+                  </div>
+                </>
+              ) : (
+                <div className="form-group">
+                  <label>Select File * (Max 10MB)</label>
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.txt,.zip"
+                  />
+                  {selectedFile && (
+                    <div
+                      style={{
+                        marginTop: "8px",
+                        fontSize: "14px",
+                        color: "#475569",
+                      }}
+                    >
+                      <strong>Selected:</strong> {selectedFile.name} (
+                      {(selectedFile.size / 1024).toFixed(2)} KB)
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="modal-actions">
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={() => setShowUploadResource(false)}
+                  onClick={() => {
+                    setShowUploadResource(false);
+                    setUploadMethod("url");
+                    setSelectedFile(null);
+                  }}
                 >
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Upload
+                  {uploadMethod === "file" && selectedFile
+                    ? "Upload File"
+                    : "Upload"}
                 </button>
               </div>
             </form>
