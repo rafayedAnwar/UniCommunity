@@ -105,8 +105,8 @@ const ProfilePage = () => {
         linkedIn: data.socialLinks?.linkedIn || "",
         github: data.socialLinks?.github || "",
         portfolio: data.socialLinks?.portfolio || "",
-          currentCourses: data.currentCourses || [],
-          completedCourses: data.completedCourses || [],
+        currentCourses: data.currentCourses || [],
+        completedCourses: data.completedCourses || [],
       });
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -176,14 +176,14 @@ const ProfilePage = () => {
           newCourse.type === "completed"
             ? parseFloat(newCourse.cgpa)
             : newCourse.cgpa
-              ? parseFloat(newCourse.cgpa)
-              : undefined,
+            ? parseFloat(newCourse.cgpa)
+            : undefined,
         credits:
           newCourse.type === "completed"
             ? parseFloat(newCourse.credits || "3")
             : newCourse.credits
-              ? parseFloat(newCourse.credits)
-              : 3,
+            ? parseFloat(newCourse.credits)
+            : 3,
       };
 
       if (newCourse.type === "current") {
@@ -198,7 +198,13 @@ const ProfilePage = () => {
         }));
       }
 
-      setNewCourse({ code: "", name: "", type: "current", cgpa: "", credits: "3" });
+      setNewCourse({
+        code: "",
+        name: "",
+        type: "current",
+        cgpa: "",
+        credits: "3",
+      });
     }
   };
 
@@ -235,7 +241,8 @@ const ProfilePage = () => {
       updatedCourse.cgpa = gp;
       // Use existing credits or default to 3 when moving to completed
       const credits = course.credits ? parseFloat(course.credits) : 3;
-      updatedCourse.credits = Number.isFinite(credits) && credits > 0 ? credits : 3;
+      updatedCourse.credits =
+        Number.isFinite(credits) && credits > 0 ? credits : 3;
     }
 
     handleRemoveCourse(index, from);
@@ -524,7 +531,7 @@ const ProfilePage = () => {
                             }
                             title="Move to completed"
                           >
-                            ->
+                            {"→"}
                           </button>
                           <button
                             className="remove-btn"
@@ -553,12 +560,14 @@ const ProfilePage = () => {
                         <span className="course-code">{course.code}</span>
                         <span className="course-name">
                           {course.name}
-                          {course.cgpa !== undefined && course.cgpa !== null && (
-                            <span className="course-meta">
-                              {" | CGPA: "}{course.cgpa}
-                              {` | Credits: ${course.credits ?? 3}`}
-                            </span>
-                          )}
+                          {course.cgpa !== undefined &&
+                            course.cgpa !== null && (
+                              <span className="course-meta">
+                                {" | CGPA: "}
+                                {course.cgpa}
+                                {` | Credits: ${course.credits ?? 3}`}
+                              </span>
+                            )}
                         </span>
                       </div>
                       {isEditing && (
@@ -570,7 +579,7 @@ const ProfilePage = () => {
                             }
                             title="Move to current"
                           >
-                            {"<-"}
+                            {"←"}
                           </button>
                           <button
                             className="remove-btn"
@@ -595,4 +604,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-

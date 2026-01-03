@@ -92,8 +92,17 @@ const joinForum = async (req, res) => {
 const uploadResource = async (req, res) => {
   try {
     const { courseCode } = req.params;
-    const { title, description, fileUrl, fileType, userId, uploaderName } =
-      req.body;
+    const {
+      title,
+      description,
+      fileUrl,
+      fileType,
+      fileName,
+      fileData,
+      fileSize,
+      userId,
+      uploaderName,
+    } = req.body;
 
     const forum = await Forum.findOne({ courseCode });
     if (!forum) {
@@ -107,11 +116,33 @@ const uploadResource = async (req, res) => {
         .json({ error: "Must be a forum member to upload resources" });
     }
 
+    // Validate that either fileUrl or fileData is provided
+    if (!fileUrl && !fileData) {
+      return res
+        .status(400)
+        .json({ error: "Either file URL or file data must be provided" });
+    }
+
+    // Validate required fields
+    if (!title || !description || !fileType) {
+      return res
+        .status(400)
+        .json({ error: "Title, description, and file type are required" });
+    }
+
+    // Check file size limit (10MB for base64 encoded files)
+    if (fileData && fileSize > 10 * 1024 * 1024) {
+      return res.status(400).json({ error: "File size exceeds 10MB limit" });
+    }
+
     const resource = {
       title,
       description,
-      fileUrl,
+      fileUrl: fileUrl || undefined,
       fileType,
+      fileName: fileName || undefined,
+      fileData: fileData || undefined,
+      fileSize: fileSize || undefined,
       uploadedBy: userId,
       uploaderName,
     };
@@ -124,6 +155,7 @@ const uploadResource = async (req, res) => {
 
     res.status(201).json(forum);
   } catch (error) {
+    console.error("Upload resource error:", error);
     res.status(400).json({ error: error.message });
   }
 };

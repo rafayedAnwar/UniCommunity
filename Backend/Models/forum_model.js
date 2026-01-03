@@ -5,8 +5,11 @@ const resourceSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    fileUrl: { type: String, required: true },
+    fileUrl: { type: String, required: false },
     fileType: { type: String, required: true },
+    fileName: { type: String, required: false },
+    fileData: { type: String, required: false },
+    fileSize: { type: Number, required: false },
     uploadedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",

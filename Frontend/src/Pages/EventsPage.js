@@ -59,7 +59,8 @@ const EventsPage = () => {
     setError("");
     try {
       const params = new URLSearchParams();
-      if (filters.eventType !== "all") params.append("eventType", filters.eventType);
+      if (filters.eventType !== "all")
+        params.append("eventType", filters.eventType);
       if (filters.startDate) params.append("startDate", filters.startDate);
       if (filters.endDate) params.append("endDate", filters.endDate);
       const res = await fetch(
@@ -148,7 +149,9 @@ const EventsPage = () => {
         ...editForm,
         userId: user._id,
         maxAttendees:
-          editForm.maxAttendees !== "" ? Number(editForm.maxAttendees) : undefined,
+          editForm.maxAttendees !== ""
+            ? Number(editForm.maxAttendees)
+            : undefined,
         tags: editForm.tags
           ? editForm.tags
               .split(",")
@@ -226,9 +229,7 @@ const EventsPage = () => {
   const myRsvpStatus = useMemo(() => {
     const map = {};
     events.forEach((ev) => {
-      const found = ev.rsvps?.find(
-        (r) => r.userId?.toString?.() === user?._id
-      );
+      const found = ev.rsvps?.find((r) => r.userId?.toString?.() === user?._id);
       if (found) map[ev._id] = found.rsvpStatus;
     });
     return map;
@@ -280,6 +281,8 @@ const EventsPage = () => {
             <option value="all">All types</option>
             <option value="academic">Academic</option>
             <option value="social">Social</option>
+            <option value="open">Open for All</option>
+            <option value="restricted">Restricted</option>
           </select>
           <input
             type="date"
@@ -342,7 +345,9 @@ const EventsPage = () => {
                 </select>
               </div>
               <div>
-                <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <label
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
                   <input
                     type="checkbox"
                     checked={!!form.openForAll}
@@ -415,214 +420,238 @@ const EventsPage = () => {
 
         <div className="events-card">
           <h2>Upcoming Events</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : events.length === 0 ? (
-        <p className="empty-state">No events yet.</p>
-      ) : (
-        <div className="events-list">
-          {events.map((ev) => {
-            const goingCount = ev.rsvps?.filter(
-              (r) => r.rsvpStatus === "going"
-            ).length;
-            const interestedCount = ev.rsvps?.filter(
-              (r) => r.rsvpStatus === "interested"
-            ).length;
-            const myStatus = myRsvpStatus[ev._id];
-            const isOwner = ev.organizerId?.toString?.() === user?._id;
-            return (
-              <div className="event-card" key={ev._id}>
-                {editingId === ev._id ? (
-                  <form className="event-form" onSubmit={handleUpdate}>
-                    <div className="form-row">
-                      <label>Title</label>
-                      <input
-                        value={editForm.title}
-                        onChange={(e) =>
-                          handleEditFormChange("title", e.target.value)
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="form-row">
-                      <label>Description</label>
-                      <textarea
-                        value={editForm.description}
-                        onChange={(e) =>
-                          handleEditFormChange("description", e.target.value)
-                        }
-                        rows={3}
-                        required
-                      />
-                    </div>
-                    <div className="form-row two-col">
-                      <div>
-                        <label>Type</label>
-                        <select
-                          value={editForm.eventType}
-                          onChange={(e) =>
-                            handleEditFormChange("eventType", e.target.value)
-                          }
-                        >
-                          <option value="academic">Academic</option>
-                          <option value="social">Social</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label>Open for all</label>
-                        <input
-                          type="checkbox"
-                          checked={!!editForm.openForAll}
-                          onChange={(e) =>
-                            handleEditFormChange("openForAll", e.target.checked)
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="form-row two-col">
-                      <div>
-                        <label>Starts</label>
-                        <input
-                          type="datetime-local"
-                          value={editForm.startDateTime}
-                          onChange={(e) =>
-                            handleEditFormChange("startDateTime", e.target.value)
-                          }
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label>Ends</label>
-                        <input
-                          type="datetime-local"
-                          value={editForm.endDateTime}
-                          onChange={(e) =>
-                            handleEditFormChange("endDateTime", e.target.value)
-                          }
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="form-row">
-                      <label>Location</label>
-                      <input
-                        value={editForm.location}
-                        onChange={(e) =>
-                          handleEditFormChange("location", e.target.value)
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="form-row two-col">
-                      <div>
-                        <label>Max attendees (optional)</label>
-                        <input
-                          type="number"
-                          min="1"
-                          value={editForm.maxAttendees}
-                          onChange={(e) =>
-                            handleEditFormChange("maxAttendees", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label>Tags</label>
-                        <input
-                          value={editForm.tags}
-                          onChange={(e) =>
-                            handleEditFormChange("tags", e.target.value)
-                          }
-                          placeholder="workshop, networking"
-                        />
-                      </div>
-                    </div>
-                    <div className="event-actions">
-                      <button
-                        className="primary"
-                        type="submit"
-                        disabled={saving}
-                      >
-                        {saving ? "Saving..." : "Save"}
-                      </button>
-                      <button
-                        className="secondary"
-                        type="button"
-                        onClick={() => {
-                          setEditingId(null);
-                          setEditForm(defaultForm);
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                    <>
-                      <div className="event-top">
-                        <div>
-                          <span className={`pill ${ev.eventType}`}>
-                            {ev.eventType}
-                          </span>
-                        <span className={`pill ${ev.openForAll ? "open" : "restricted"}`}>
-                          {ev.openForAll ? "Open for all" : "Restricted"}
-                        </span>
-                        <h3>{ev.title}</h3>
-                        <p className="muted">{ev.description}</p>
-                      </div>
-                      <div className="event-time">
-                        <div>
-                          <strong>Starts:</strong>{" "}
-                          {new Date(ev.startDateTime).toLocaleString()}
+          {loading ? (
+            <p>Loading...</p>
+          ) : events.length === 0 ? (
+            <p className="empty-state">No events yet.</p>
+          ) : (
+            <div className="events-list">
+              {events.map((ev) => {
+                const goingCount = ev.rsvps?.filter(
+                  (r) => r.rsvpStatus === "going"
+                ).length;
+                const interestedCount = ev.rsvps?.filter(
+                  (r) => r.rsvpStatus === "interested"
+                ).length;
+                const myStatus = myRsvpStatus[ev._id];
+                const isOwner = ev.organizerId?.toString?.() === user?._id;
+                return (
+                  <div className="event-item" key={ev._id}>
+                    {editingId === ev._id ? (
+                      <form className="event-form" onSubmit={handleUpdate}>
+                        <div className="form-row">
+                          <label>Title</label>
+                          <input
+                            value={editForm.title}
+                            onChange={(e) =>
+                              handleEditFormChange("title", e.target.value)
+                            }
+                            required
+                          />
                         </div>
-                        <div>
-                          <strong>Ends:</strong>{" "}
-                          {new Date(ev.endDateTime).toLocaleString()}
+                        <div className="form-row">
+                          <label>Description</label>
+                          <textarea
+                            value={editForm.description}
+                            onChange={(e) =>
+                              handleEditFormChange(
+                                "description",
+                                e.target.value
+                              )
+                            }
+                            rows={3}
+                            required
+                          />
                         </div>
-                        <div>
-                          <strong>Location:</strong> {ev.location}
-                        </div>
-                        {ev.maxAttendees && (
+                        <div className="form-row two-col">
                           <div>
-                            <strong>Max:</strong> {ev.maxAttendees}
+                            <label>Type</label>
+                            <select
+                              value={editForm.eventType}
+                              onChange={(e) =>
+                                handleEditFormChange(
+                                  "eventType",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="academic">Academic</option>
+                              <option value="social">Social</option>
+                            </select>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="event-bottom">
-                      <div className="rsvp-stats">
-                        <span>Going: {goingCount || 0}</span>
-                        <span>Interested: {interestedCount || 0}</span>
-                        <span>Mine: {myStatus || "—"}</span>
-                      </div>
-                      <div className="event-actions">
-                        {renderRsvpButtons(ev)}
-                        {isOwner && (
-                          <>
-                            <button
-                              className="secondary"
-                              type="button"
-                              onClick={() => startEdit(ev)}
+                          <div>
+                            <label>Open for all</label>
+                            <input
+                              type="checkbox"
+                              checked={!!editForm.openForAll}
+                              onChange={(e) =>
+                                handleEditFormChange(
+                                  "openForAll",
+                                  e.target.checked
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="form-row two-col">
+                          <div>
+                            <label>Starts</label>
+                            <input
+                              type="datetime-local"
+                              value={editForm.startDateTime}
+                              onChange={(e) =>
+                                handleEditFormChange(
+                                  "startDateTime",
+                                  e.target.value
+                                )
+                              }
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label>Ends</label>
+                            <input
+                              type="datetime-local"
+                              value={editForm.endDateTime}
+                              onChange={(e) =>
+                                handleEditFormChange(
+                                  "endDateTime",
+                                  e.target.value
+                                )
+                              }
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="form-row">
+                          <label>Location</label>
+                          <input
+                            value={editForm.location}
+                            onChange={(e) =>
+                              handleEditFormChange("location", e.target.value)
+                            }
+                            required
+                          />
+                        </div>
+                        <div className="form-row two-col">
+                          <div>
+                            <label>Max attendees (optional)</label>
+                            <input
+                              type="number"
+                              min="1"
+                              value={editForm.maxAttendees}
+                              onChange={(e) =>
+                                handleEditFormChange(
+                                  "maxAttendees",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>Tags</label>
+                            <input
+                              value={editForm.tags}
+                              onChange={(e) =>
+                                handleEditFormChange("tags", e.target.value)
+                              }
+                              placeholder="workshop, networking"
+                            />
+                          </div>
+                        </div>
+                        <div className="event-actions">
+                          <button
+                            className="primary"
+                            type="submit"
+                            disabled={saving}
+                          >
+                            {saving ? "Saving..." : "Save"}
+                          </button>
+                          <button
+                            className="secondary"
+                            type="button"
+                            onClick={() => {
+                              setEditingId(null);
+                              setEditForm(defaultForm);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <>
+                        <div className="event-top">
+                          <div>
+                            <h3 className="event-name">{ev.title}</h3>
+                          </div>
+                          <div className="event-pills">
+                            <span className={`pill ${ev.eventType}`}>
+                              {ev.eventType}
+                            </span>
+                            <span
+                              className={`pill ${
+                                ev.openForAll ? "open" : "restricted"
+                              }`}
                             >
-                              Edit
-                            </button>
-                            <button
-                              className="danger"
-                              type="button"
-                              onClick={() => handleDelete(ev._id)}
-                            >
-                              Delete
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+                              {ev.openForAll ? "Open for all" : "Restricted"}
+                            </span>
+                          </div>
+                        </div>
+                        <p className="muted">{ev.description}</p>
+                        <div className="event-time">
+                          <div>
+                            <strong>Starts:</strong>{" "}
+                            {new Date(ev.startDateTime).toLocaleString()}
+                          </div>
+                          <div>
+                            <strong>Ends:</strong>{" "}
+                            {new Date(ev.endDateTime).toLocaleString()}
+                          </div>
+                          <div>
+                            <strong>Location:</strong> {ev.location}
+                          </div>
+                          {ev.maxAttendees && (
+                            <div>
+                              <strong>Max:</strong> {ev.maxAttendees}
+                            </div>
+                          )}
+                        </div>
+                        <div className="event-bottom">
+                          <div className="rsvp-stats">
+                            <span>Going: {goingCount || 0}</span>
+                            <span>Interested: {interestedCount || 0}</span>
+                            <span>Mine: {myStatus || "—"}</span>
+                          </div>
+                          <div className="event-actions">
+                            {renderRsvpButtons(ev)}
+                            {isOwner && (
+                              <>
+                                <button
+                                  className="secondary"
+                                  type="button"
+                                  onClick={() => startEdit(ev)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="danger"
+                                  type="button"
+                                  onClick={() => handleDelete(ev._id)}
+                                >
+                                  Delete
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

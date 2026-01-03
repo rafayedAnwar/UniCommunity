@@ -48,9 +48,12 @@ const ProjectPartnersPage = () => {
       if (filters.course.trim()) params.append("course", filters.course.trim());
       if (filters.skills.trim()) params.append("skills", filters.skills.trim());
       if (filters.q.trim()) params.append("q", filters.q.trim());
-      const res = await fetch(`http://localhost:1760/api/partners?${params.toString()}`, {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `http://localhost:1760/api/partners?${params.toString()}`,
+        {
+          credentials: "include",
+        }
+      );
       if (!res.ok) throw new Error("Failed to load");
       const data = await res.json();
       setListings(Array.isArray(data) ? data : []);
@@ -111,21 +114,27 @@ const ProjectPartnersPage = () => {
 
   const handleTrello = async (id) => {
     try {
-      const res = await fetch(`http://localhost:1760/api/partners/${id}/trello`, {
-        method: "POST",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `http://localhost:1760/api/partners/${id}/trello`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Trello creation failed");
       setListings((prev) => prev.map((l) => (l._id === id ? data : l)));
-      if (data.trelloBoardUrl) window.open(data.trelloBoardUrl, "_blank", "noopener");
+      if (data.trelloBoardUrl)
+        window.open(data.trelloBoardUrl, "_blank", "noopener");
     } catch (err) {
       setError(err.message || "Could not create Trello board");
     }
   };
 
   const isMember = (listing) =>
-    listing.members?.some((m) => m.userId === user?._id || m.userId === user?._id?.toString());
+    listing.members?.some(
+      (m) => m.userId === user?._id || m.userId === user?._id?.toString()
+    );
 
   if (!user || loading) {
     return (
@@ -146,12 +155,16 @@ const ProjectPartnersPage = () => {
           <input
             placeholder="Courses (comma separated)"
             value={filters.course}
-            onChange={(e) => setFilters((f) => ({ ...f, course: e.target.value }))}
+            onChange={(e) =>
+              setFilters((f) => ({ ...f, course: e.target.value }))
+            }
           />
           <input
             placeholder="Skills (comma separated)"
             value={filters.skills}
-            onChange={(e) => setFilters((f) => ({ ...f, skills: e.target.value }))}
+            onChange={(e) =>
+              setFilters((f) => ({ ...f, skills: e.target.value }))
+            }
           />
           <input
             placeholder="Search by project or creator"
@@ -175,7 +188,9 @@ const ProjectPartnersPage = () => {
                 <label>Project name</label>
                 <input
                   value={form.projectName}
-                  onChange={(e) => setForm((p) => ({ ...p, projectName: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, projectName: e.target.value }))
+                  }
                   placeholder="Thesis topic or project title"
                   required
                 />
@@ -184,7 +199,9 @@ const ProjectPartnersPage = () => {
                 <label>Courses (comma separated)</label>
                 <input
                   value={form.courses}
-                  onChange={(e) => setForm((p) => ({ ...p, courses: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, courses: e.target.value }))
+                  }
                   placeholder="CSE471, CSE422"
                 />
               </div>
@@ -194,7 +211,9 @@ const ProjectPartnersPage = () => {
                 <label>Skills needed (comma separated)</label>
                 <input
                   value={form.skills}
-                  onChange={(e) => setForm((p) => ({ ...p, skills: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, skills: e.target.value }))
+                  }
                   placeholder="React, ML, Writing"
                 />
               </div>
@@ -204,7 +223,9 @@ const ProjectPartnersPage = () => {
               <textarea
                 rows={3}
                 value={form.description}
-                onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, description: e.target.value }))
+                }
                 placeholder="Project idea, expectations, timeline..."
                 required
               />
@@ -220,23 +241,28 @@ const ProjectPartnersPage = () => {
           {listings.length === 0 ? (
             <p className="empty-state">No listings yet.</p>
           ) : (
-            <div className="events-list" style={{ maxHeight: 600, overflowY: "auto", paddingRight: 6 }}>
+            <div
+              className="events-list"
+              style={{ maxHeight: 600, overflowY: "auto", paddingRight: 6 }}
+            >
               {listings.map((l) => {
                 const memberCount = l.members?.length || 0;
                 const memberNames = l.members?.map((m) => m.name).join(", ");
-                const owner = l.creatorId === user?._id || l.creatorId === user?._id?.toString();
+                const owner =
+                  l.creatorId === user?._id ||
+                  l.creatorId === user?._id?.toString();
                 return (
-                <div className="listing" key={l._id}>
-                  <div className="listing-top">
-                    <div>
-                      <strong>{l.projectName || "Project"}</strong>
-                      <div className="muted">
-                        Courses: {(l.courseCodes || []).join(", ")}
+                  <div className="listing" key={l._id}>
+                    <div className="listing-top">
+                      <div>
+                        <strong>{l.projectName || "Project"}</strong>
+                        <div className="muted">
+                          Courses: {(l.courseCodes || []).join(", ")}
+                        </div>
+                        <div className="muted">by {l.creatorName}</div>
                       </div>
-                      <div className="muted">by {l.creatorName}</div>
+                      <div className="pill">{memberCount} members</div>
                     </div>
-                    <div className="pill">{memberCount} members</div>
-                  </div>
                     <p>{l.description}</p>
                     <div className="skills">
                       {(l.skills || []).map((s, idx) => (
@@ -248,24 +274,30 @@ const ProjectPartnersPage = () => {
                     <div className="members">
                       <strong>Members:</strong> {memberNames || "—"}
                     </div>
-                    {l.trelloBoardUrl && (
+                    {isMember(l) && l.trelloBoardUrl && (
                       <a
                         className="trello-link"
                         href={l.trelloBoardUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Trello board
+                        🔗 Open Trello Board
                       </a>
                     )}
                     <div className="partners-actions">
                       {!isMember(l) && (
-                        <button className="secondary" onClick={() => handleJoin(l._id)}>
+                        <button
+                          className="secondary"
+                          onClick={() => handleJoin(l._id)}
+                        >
                           Join group
                         </button>
                       )}
-                      {owner && !l.trelloBoardUrl && (
-                        <button className="primary" onClick={() => handleTrello(l._id)}>
+                      {isMember(l) && owner && !l.trelloBoardUrl && (
+                        <button
+                          className="primary"
+                          onClick={() => handleTrello(l._id)}
+                        >
                           Create Trello board
                         </button>
                       )}
