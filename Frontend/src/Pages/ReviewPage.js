@@ -15,42 +15,28 @@ const ReviewPage = () => {
 
     
     useEffect(() => {
-        fetch("http://localhost:1760/api/users/current", {
-            credentials: "include", // important for session-based auth
-        })
+        fetch("http://localhost:1760/api/users/current", { credentials: "include",})
         .then(res => res.json())
-        .then(data => {
-            if (data.user) setCurrentUser(data.user);
-        })
+        .then(data => { if (data.user) setCurrentUser(data.user);} )
         .catch(err => console.error(err));
     }, []);
     
     useEffect(() => {
-  if (!courseSelected) {
-    fetch(`http://localhost:1760/api/reviews/all`)
-      .then((res) => res.json())
-      .then((data) => setReviews(Array.isArray(data) ? data : []))
-      .catch((err) => console.error(err));
-  } else {
-    fetch(`http://localhost:1760/api/reviews/${courseSelected}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setReviews(data);
-        } else if (data && !data.error) {
-          // single review object
-          setReviews([data]);
-        } else {
-          // error or no review
-          setReviews([]);
-        }
-      })
-      .catch((err) => console.error(err));
-  }
-}, [courseSelected]);
+      if (!courseSelected) {
+        fetch(`http://localhost:1760/api/reviews/all`)
+          .then((res) => res.json())
+          .then((data) => setReviews(Array.isArray(data) ? data : []))
+          .catch((err) => console.error(err));
+      } else {
+        fetch(`http://localhost:1760/api/reviews/${courseSelected}`) .then((res) => res.json())
+          .then((data) => {
+            if (Array.isArray(data)) { setReviews(data); } 
+            else if (data && !data.error) { setReviews([data]);} 
+            else { setReviews([]); }
+          }).catch((err) => console.error(err));}
+    }, [courseSelected]);
 
-
-
+  
     return (
         <div className="main-container">
             <div className="searchbar-container">
@@ -58,11 +44,8 @@ const ReviewPage = () => {
                 <div className="search-results">
                     {results.map((result,id) => {
                         return <div key={id} className="search-results-items" onClick=
-                                    {
-                                        () => {setCourseSelected(result.course_code); 
-                                        setResults([]);
-                                        setSearchInput("")}
-                                    }>
+                                    { () => {setCourseSelected(result.course_code); 
+                                      setResults([]); setSearchInput("")}}>
                                     {result.course_code}
                                 </div>})}
                 </div>
@@ -71,8 +54,8 @@ const ReviewPage = () => {
                 {reviews.length === 0 ? (
                     <p>No reviews yet for this course.</p>) 
                 : (reviews.map((review) => (<ReviewBlock key={review._id} review={review} currentUser={currentUser} />)))}
-                </div>            
-            </div>
+            </div>            
+        </div>
     );
 } 
 
